@@ -9,15 +9,17 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class PriceSpecificationProvider implements SpecificationProvider<Book> {
+    private static final String KEY = "price";
+
     @Override
     public Specification<Book> getSpecification(String[] params) {
-        return (root, query, criteriaBuilder) -> root.get("price").in(Arrays.stream(params)
+        return (root, query, criteriaBuilder) -> root.get(KEY).in(Arrays.stream(params)
                 .map(BigDecimal::new)
                 .toArray());
     }
 
     @Override
     public String getKey() {
-        return "price";
+        return KEY;
     }
 }
