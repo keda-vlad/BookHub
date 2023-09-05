@@ -17,17 +17,4 @@ public class BookstoreApplication {
     public static void main(String[] args) {
         SpringApplication.run(BookstoreApplication.class, args);
     }
-
-    @Bean
-    public CommandLineRunner commandLineRunner() {
-        return args -> {
-            CreateBookRequestDto book = new CreateBookRequestDto();
-            book.setTitle("The Lord of the Rings: The Return of the King");
-            book.setAuthor("J. R. R. Tolkien");
-            book.setIsbn("9780007136575");
-            book.setPrice(BigDecimal.valueOf(199.99));
-            bookService.save(book);
-            System.out.println(bookService.findAll());
-        };
-    }
 }
