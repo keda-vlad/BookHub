@@ -57,7 +57,7 @@ public class BookController {
     @PutMapping ("/{id}")
     @Operation(summary = "Update book by id", description = "Update book by id")
     public void update(@PathVariable Long id, @RequestBody CreateBookRequestDto bookDto) {
-        bookService.updateById(id, bookDto);
+        bookService.update(id, bookDto);
     }
 
     @GetMapping("/search")
