@@ -36,13 +36,13 @@ public class BookController {
 
     @GetMapping("/{id}")
     @Operation(summary = "Get book by id", description = "Get book by id")
-    public BookDto getBookById(@PathVariable Long id) {
+    public BookDto getById(@PathVariable Long id) {
         return bookService.getBookById(id);
     }
 
     @PostMapping
     @Operation(summary = "Create a new book", description = "Create a new book")
-    public BookDto createBook(@RequestBody @Valid CreateBookRequestDto bookDto) {
+    public BookDto create(@RequestBody @Valid CreateBookRequestDto bookDto) {
         return bookService.save(bookDto);
     }
 
@@ -56,13 +56,13 @@ public class BookController {
     @ResponseStatus(HttpStatus.OK)
     @PutMapping ("/{id}")
     @Operation(summary = "Update book by id", description = "Update book by id")
-    public void updateById(@PathVariable Long id, @RequestBody CreateBookRequestDto bookDto) {
+    public void update(@PathVariable Long id, @RequestBody CreateBookRequestDto bookDto) {
         bookService.updateById(id, bookDto);
     }
 
     @GetMapping("/search")
     @Operation(summary = "Search book", description = "Search book by parameters")
-    public List<BookDto> searchBooks(BookSearchParametersDto searchParameters) {
+    public List<BookDto> search(BookSearchParametersDto searchParameters) {
         return bookService.search(searchParameters);
     }
 }

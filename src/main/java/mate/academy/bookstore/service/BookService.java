@@ -11,11 +11,11 @@ public interface BookService {
 
     List<BookDto> findAll(Pageable pageable);
 
-    BookDto getBookById(Long id);
+    BookDto getById(Long id);
 
     void deleteById(Long id);
 
-    void updateById(Long id, CreateBookRequestDto requestDto);
+    void update(Long id, CreateBookRequestDto requestDto);
 
     List<BookDto> search(BookSearchParametersDto bookSearchParametersDto);
 }
