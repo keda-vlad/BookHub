@@ -36,33 +36,33 @@ public class BookController {
 
     @GetMapping("/{id}")
     @Operation(summary = "Get book by id", description = "Get book by id")
-    public BookDto getBookById(@PathVariable Long id) {
-        return bookService.getBookById(id);
+    public BookDto getById(@PathVariable Long id) {
+        return bookService.getById(id);
     }
 
     @PostMapping
     @Operation(summary = "Create a new book", description = "Create a new book")
-    public BookDto createBook(@RequestBody @Valid CreateBookRequestDto bookDto) {
+    public BookDto create(@RequestBody @Valid CreateBookRequestDto bookDto) {
         return bookService.save(bookDto);
     }
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping("/{id}")
     @Operation(summary = "Delete book by id", description = "Delete book by id")
-    public void deleteById(@PathVariable Long id) {
+    public void delete(@PathVariable Long id) {
         bookService.deleteById(id);
     }
 
     @ResponseStatus(HttpStatus.OK)
     @PutMapping ("/{id}")
     @Operation(summary = "Update book by id", description = "Update book by id")
-    public void updateById(@PathVariable Long id, @RequestBody CreateBookRequestDto bookDto) {
+    public void update(@PathVariable Long id, @RequestBody CreateBookRequestDto bookDto) {
         bookService.updateById(id, bookDto);
     }
 
     @GetMapping("/search")
     @Operation(summary = "Search book", description = "Search book by parameters")
-    public List<BookDto> searchBooks(BookSearchParametersDto searchParameters) {
+    public List<BookDto> search(BookSearchParametersDto searchParameters) {
         return bookService.search(searchParameters);
     }
 }
