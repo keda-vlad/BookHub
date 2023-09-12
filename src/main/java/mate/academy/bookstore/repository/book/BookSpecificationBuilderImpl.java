@@ -1,7 +1,7 @@
 package mate.academy.bookstore.repository.book;
 
 import lombok.RequiredArgsConstructor;
-import mate.academy.bookstore.dto.BookSearchParametersDto;
+import mate.academy.bookstore.dto.book.BookSearchParametersDto;
 import mate.academy.bookstore.model.Book;
 import mate.academy.bookstore.repository.SpecificationProviderManager;
 import org.springframework.data.jpa.domain.Specification;
@@ -29,10 +29,10 @@ public class BookSpecificationBuilderImpl implements BookSpecificationBuilder {
                     .getSpecification(bookSearchParametersDto.getAuthors()));
 
         }
-        if (bookSearchParametersDto.getPrices() != null
-                && bookSearchParametersDto.getPrices().length > 0) {
+        if (bookSearchParametersDto.getAuthors() != null
+                && bookSearchParametersDto.getAuthors().length > 0) {
             spec = spec.and(specificationProviderManager.getSpecificationProvider(PRICE_KEY)
-                    .getSpecification(bookSearchParametersDto.getPrices()));
+                    .getSpecification(bookSearchParametersDto.getAuthors()));
 
         }
         return spec;
