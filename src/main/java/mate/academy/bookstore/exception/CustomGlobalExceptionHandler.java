@@ -56,6 +56,14 @@ public class CustomGlobalExceptionHandler extends ResponseEntityExceptionHandler
         return new ResponseEntity<>(errorBody, errorBody.getStatus());
     }
 
+    @ExceptionHandler(RegistrationException.class)
+    public ResponseEntity<Object> handleSpecificationNotFoundException(
+            RegistrationException ex
+    ) {
+        ErrorBody errorBody = ErrorBody.of(HttpStatus.CONFLICT, ex.getMessage());
+        return new ResponseEntity<>(errorBody, errorBody.getStatus());
+    }
+
     private String getErrorMessage(ObjectError objectError) {
         if (objectError instanceof FieldError) {
             String field = ((FieldError) objectError).getField();
