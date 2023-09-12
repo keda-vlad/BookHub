@@ -18,21 +18,21 @@ public class BookSpecificationBuilderImpl implements BookSpecificationBuilder {
     @Override
     public Specification<Book> build(BookSearchParametersDto bookSearchParametersDto) {
         Specification<Book> spec = Specification.where(null);
-        if (bookSearchParametersDto.getTitles() != null
-                && bookSearchParametersDto.getTitles().length > 0) {
+        if (bookSearchParametersDto.titles() != null
+                && bookSearchParametersDto.titles().length > 0) {
             spec = spec.and(specificationProviderManager.getSpecificationProvider(TITLE_KEY)
-                    .getSpecification(bookSearchParametersDto.getTitles()));
+                    .getSpecification(bookSearchParametersDto.titles()));
         }
-        if (bookSearchParametersDto.getAuthors() != null
-                && bookSearchParametersDto.getAuthors().length > 0) {
+        if (bookSearchParametersDto.authors() != null
+                && bookSearchParametersDto.authors().length > 0) {
             spec = spec.and(specificationProviderManager.getSpecificationProvider(AUTHOR_KEY)
-                    .getSpecification(bookSearchParametersDto.getAuthors()));
+                    .getSpecification(bookSearchParametersDto.authors()));
 
         }
-        if (bookSearchParametersDto.getAuthors() != null
-                && bookSearchParametersDto.getAuthors().length > 0) {
+        if (bookSearchParametersDto.authors() != null
+                && bookSearchParametersDto.authors().length > 0) {
             spec = spec.and(specificationProviderManager.getSpecificationProvider(PRICE_KEY)
-                    .getSpecification(bookSearchParametersDto.getAuthors()));
+                    .getSpecification(bookSearchParametersDto.authors()));
 
         }
         return spec;

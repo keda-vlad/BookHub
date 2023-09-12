@@ -137,7 +137,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-checkstyle-plugin</artifactId>
-                <version>3.1.1</version>
+                <version>3.3.0</version>
                 <executions>
                     <execution>
                         <phase>compile</phase>
@@ -148,14 +148,10 @@
                 </executions>
                 <configuration>
                     <configLocation>${maven.checkstyle.plugin.configLocation}</configLocation>
-                    <encoding>UTF-8</encoding>
                     <consoleOutput>true</consoleOutput>
                     <failsOnError>true</failsOnError>
                     <linkXRef>false</linkXRef>
-                    <excludes>
-                        mate/academy/bookstore/mapper/impl/BookMapperImpl.java,
-                        mate/academy/bookstore/mapper/impl/UserMapperImpl.java
-                    </excludes>
+                    <sourceDirectories>src</sourceDirectories>
                 </configuration>
             </plugin>
             <plugin>
