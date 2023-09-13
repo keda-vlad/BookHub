@@ -11,7 +11,7 @@ import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Email;
 import java.util.Collection;
-import java.util.HashSet;
+import java.util.Set;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -47,7 +47,7 @@ public class User implements UserDetails {
     )
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
-    private HashSet<Role> roles;
+    private Set<Role> roles;
     @Column(name = "shipping_address")
     private String shippingAddress;
     @Column(nullable = false, name = "is_deleted")

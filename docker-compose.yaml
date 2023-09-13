@@ -1,0 +1,17 @@
+version: "3.8"
+
+services:
+  db:
+    image: mysql
+    restart: always
+    env_file: ./.env
+    ports:
+      - "3307:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: $MYSQL_ROOT_PASSWORD
+      MYSQL_DATABASE: $MYSQL_DATABASE
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -h localhost -u root -pBorn_to_sql1"]
+      interval: 30s
+      timeout: 30s
+      retries: 3

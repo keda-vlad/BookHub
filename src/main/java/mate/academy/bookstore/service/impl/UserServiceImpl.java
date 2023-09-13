@@ -1,6 +1,5 @@
 package mate.academy.bookstore.service.impl;
 
-import java.util.HashSet;
 import java.util.Set;
 import lombok.RequiredArgsConstructor;
 import mate.academy.bookstore.dto.user.UserRegistrationRequestDto;
@@ -36,7 +35,7 @@ public class UserServiceImpl implements UserService {
         user.setLastName(request.lastName());
         user.setEmail(request.email());
         Role role = roleService.getByName(Role.RoleName.ROLE_USER);
-        user.setRoles(new HashSet<>(Set.of(role)));
+        user.setRoles(Set.of(role));
         return userMapper.toResponseDto(userRepository.save(user));
     }
 }
