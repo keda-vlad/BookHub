@@ -37,6 +37,5 @@ public class UserServiceImpl implements UserService {
         Role role = roleService.getByName(Role.RoleName.ROLE_USER);
         user.setRoles(Set.of(role));
         return userMapper.toResponseDto(userRepository.save(user));
-
     }
 }
