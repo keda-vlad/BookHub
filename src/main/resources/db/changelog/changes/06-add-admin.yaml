@@ -1,0 +1,29 @@
+databaseChangeLog:
+  - changeSet:
+      id: add-admin
+      author: kvlad
+      changes:
+        - insert:
+            tableName: users
+            columns:
+              - column:
+                  name: email
+                  value: admin@example.com
+              - column:
+                  name: first_name
+                  value: Vlad
+              - column:
+                  name: last_name
+                  value: Keda
+              - column:
+                  name: password
+                  value: $2a$12$CSUiiqDq6fb9C.VBirqqS.aPIvl3gPUsSkFkJpL8qOkKJ6tWJPpSu
+        - insert:
+            tableName: user_role
+            columns:
+              - column:
+                  name: user_id
+                  valueNumeric: 1
+              - column:
+                  name: role_id
+                  valueNumeric: 1
