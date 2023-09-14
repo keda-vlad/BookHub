@@ -15,9 +15,9 @@ import org.mapstruct.MappingTarget;
 
 @Mapper(config = MapperConfig.class)
 public interface BookMapper {
-    @Mapping(target = "categories", ignore = true)
     BookDto toDto(Book book);
 
+    @Mapping(target = "categories", ignore = true)
     Book toModel(CreateBookRequestDto requestDto);
 
     BookDtoWithoutCategoryIds toDtoWithoutCategories(Book book);
@@ -28,5 +28,11 @@ public interface BookMapper {
                 .map(Category::getId)
                 .collect(Collectors.toSet());
         bookDto.setCategories(categories);
+    }
+
+    default Set<Long> mapCategoriesToLongs(Set<Category> categories) {
+        return categories.stream()
+                .map(Category::getId)
+                .collect(Collectors.toSet());
     }
 }
