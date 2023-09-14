@@ -2,6 +2,7 @@ package mate.academy.bookstore.service;
 
 import java.util.List;
 import mate.academy.bookstore.dto.category.CategoryDto;
+import mate.academy.bookstore.dto.category.RequestCategoryDto;
 import org.springframework.data.domain.Pageable;
 
 public interface CategoryService {
@@ -9,9 +10,9 @@ public interface CategoryService {
 
     CategoryDto getById(Long id);
 
-    CategoryDto save(CategoryDto categoryDto);
+    CategoryDto save(RequestCategoryDto categoryDto);
 
-    CategoryDto update(Long id, CategoryDto categoryDto);
+    CategoryDto update(Long id, RequestCategoryDto categoryDto);
 
     void deleteById(Long id);
 }

@@ -3,9 +3,12 @@ package mate.academy.bookstore.controller;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.List;
+
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import mate.academy.bookstore.dto.book.BookDtoWithoutCategoryIds;
 import mate.academy.bookstore.dto.category.CategoryDto;
+import mate.academy.bookstore.dto.category.RequestCategoryDto;
 import mate.academy.bookstore.service.BookService;
 import mate.academy.bookstore.service.CategoryService;
 import org.springframework.data.domain.Pageable;
@@ -30,9 +33,9 @@ public class CategoryController {
     private final BookService bookService;
 
     @PostMapping
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    //@PreAuthorize("hasRole('ROLE_ADMIN')")
     @Operation(summary = "Create a new category", description = "Create a new category")
-    public CategoryDto create(@RequestBody CategoryDto categoryDto) {
+    public CategoryDto create(@RequestBody @Valid RequestCategoryDto categoryDto) {
         return categoryService.save(categoryDto);
     }
 
@@ -51,7 +54,7 @@ public class CategoryController {
     @PutMapping ("/{id}")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @Operation(summary = "Update category by id", description = "Update category by id")
-    public CategoryDto update(@PathVariable Long id, @RequestBody CategoryDto categoryDto) {
+    public CategoryDto update(@PathVariable Long id, @RequestBody RequestCategoryDto categoryDto) {
         return categoryService.update(id, categoryDto);
     }
 
