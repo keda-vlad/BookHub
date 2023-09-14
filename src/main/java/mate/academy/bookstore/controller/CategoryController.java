@@ -32,7 +32,7 @@ public class CategoryController {
     private final BookService bookService;
 
     @PostMapping
-    //@PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @Operation(summary = "Create a new category", description = "Create a new category")
     public CategoryDto create(@RequestBody @Valid RequestCategoryDto categoryDto) {
         return categoryService.save(categoryDto);
