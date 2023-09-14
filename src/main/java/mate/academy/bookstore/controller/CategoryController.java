@@ -11,7 +11,15 @@ import mate.academy.bookstore.service.CategoryService;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestController;
 
 @RequiredArgsConstructor
 @RestController
@@ -57,7 +65,10 @@ public class CategoryController {
 
     @GetMapping("/{id}/books")
     @Operation(summary = "Get category by id", description = "Get category by id")
-    public List<BookDtoWithoutCategoryIds> getBooksByCategoryId(@PathVariable Long id, Pageable pageable) {
+    public List<BookDtoWithoutCategoryIds> getBooksByCategoryId(
+            @PathVariable Long id,
+            Pageable pageable
+    ) {
         return bookService.findAllByCategoryId(id, pageable);
     }
 }
