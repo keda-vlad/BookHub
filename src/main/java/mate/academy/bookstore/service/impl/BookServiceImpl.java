@@ -1,9 +1,6 @@
 package mate.academy.bookstore.service.impl;
 
 import java.util.List;
-import java.util.Optional;
-import java.util.Set;
-import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import mate.academy.bookstore.dto.book.BookDto;
 import mate.academy.bookstore.dto.book.BookDtoWithoutCategoryIds;
@@ -12,11 +9,10 @@ import mate.academy.bookstore.dto.book.CreateBookRequestDto;
 import mate.academy.bookstore.exception.EntityNotFoundException;
 import mate.academy.bookstore.mapper.BookMapper;
 import mate.academy.bookstore.model.Book;
-import mate.academy.bookstore.model.Category;
 import mate.academy.bookstore.repository.book.BookRepository;
 import mate.academy.bookstore.repository.book.BookSpecificationBuilder;
-import mate.academy.bookstore.repository.category.CategoryRepository;
 import mate.academy.bookstore.service.BookService;
+import mate.academy.bookstore.service.CategoryService;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
@@ -27,12 +23,12 @@ public class BookServiceImpl implements BookService {
     private final BookRepository bookRepository;
     private final BookMapper bookMapper;
     private final BookSpecificationBuilder bookSpecificationBuilder;
-    private final CategoryRepository categoryRepository;
+    private final CategoryService categoryService;
 
     @Override
     public BookDto save(CreateBookRequestDto requestDto) {
         Book book = bookMapper.toModel(requestDto);
-        book.setCategories(parseCategoriesFromDto(requestDto));
+        book.setCategories(categoryService.findAllByIdIn(requestDto.categories()));
         book = bookRepository.save(book);
         return bookMapper.toDto(book);
     }
@@ -60,7 +56,7 @@ public class BookServiceImpl implements BookService {
     public void update(Long id, CreateBookRequestDto requestDto) {
         Book book = bookMapper.toModel(requestDto);
         book.setId(id);
-        book.setCategories(parseCategoriesFromDto(requestDto));
+        book.setCategories(categoryService.findAllByIdIn(requestDto.categories()));
         bookRepository.save(book);
     }
 
@@ -81,12 +77,5 @@ public class BookServiceImpl implements BookService {
         return bookRepository.findAllByCategoryId(id, pageable).stream()
                 .map(bookMapper::toDtoWithoutCategories)
                 .toList();
-    }
-
-    private Set<Category> parseCategoriesFromDto(CreateBookRequestDto requestDto) {
-        return requestDto.categories().stream()
-                .map(categoryRepository::findById)
-                .map(Optional::orElseThrow)
-                .collect(Collectors.toSet());
     }
 }

@@ -1,6 +1,8 @@
 package mate.academy.bookstore.service.impl;
 
+import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 import lombok.RequiredArgsConstructor;
 import mate.academy.bookstore.dto.category.CategoryDto;
 import mate.academy.bookstore.dto.category.RequestCategoryDto;
@@ -50,5 +52,10 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public void deleteById(Long id) {
         categoryRepository.deleteById(id);
+    }
+
+    @Override
+    public Set<Category> findAllByIdIn(Collection<Long> id) {
+        return categoryRepository.findAllByIdIn(id);
     }
 }
