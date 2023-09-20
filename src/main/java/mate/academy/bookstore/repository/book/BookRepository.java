@@ -21,9 +21,11 @@ public interface BookRepository extends JpaRepository<Book, Long>, JpaSpecificat
     @Query("SELECT DISTINCT b FROM Book b LEFT JOIN FETCH b.categories")
     List<Book> findAllWithCategories(Specification<Book> bookSpecification, Pageable pageable);
 
-    @Query("SELECT DISTINCT b "
-            + "FROM Book b "
-            + "LEFT JOIN FETCH b.categories "
-            + "WHERE b.id = :id")
+    @Query("""
+            SELECT DISTINCT b 
+            FROM Book b 
+            LEFT JOIN FETCH b.categories 
+            WHERE b.id = :id
+            """)
     Optional<Book> findByIdWithCategories(Long id);
 }

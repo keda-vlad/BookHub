@@ -10,4 +10,7 @@ import org.mapstruct.Mapping;
 public interface ShoppingCartMapper {
     @Mapping(source = "user.id", target = "userId")
     ShoppingCartDto toDto(ShoppingCart shoppingCart);
+
+    @Mapping(source = "userId", target = "user.id")
+    ShoppingCart toEntity(ShoppingCartDto shoppingCartDto);
 }
