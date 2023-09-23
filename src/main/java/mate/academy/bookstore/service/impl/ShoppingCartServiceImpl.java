@@ -1,5 +1,6 @@
 package mate.academy.bookstore.service.impl;
 
+import java.util.Objects;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import mate.academy.bookstore.dto.cartitem.AddToCartRequestDto;
@@ -28,24 +29,37 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
 
     @Override
     public ShoppingCartDto getById(Long id) {
-        ShoppingCart shoppingCart = shoppingCartRepository.findById(id).orElseThrow(() ->
+        ShoppingCart shoppingCart = shoppingCartRepository.findByCartId(id).orElseThrow(() ->
                 new EntityNotFoundException("Can't find shopping cart by id = " + id));
         return shoppingCartMapper.toDto(shoppingCart);
     }
 
     @Override
     public ShoppingCartDto addToCart(AddToCartRequestDto requestDto, Long userId) {
+        ShoppingCart shoppingCart = getOrCreateShoppingCart(userId);
+        updateOrAddCartItem(shoppingCart, requestDto);
+        return shoppingCartMapper.toDto(shoppingCart);
+    }
+
+    private ShoppingCart getOrCreateShoppingCart(Long userId) {
         User user = userRepository.findById(userId).orElseThrow(() ->
                 new EntityNotFoundException("Can't find user by id = " + userId));
-        Book book = bookRepository.findById(requestDto.bookId()).orElseThrow(() ->
-                new EntityNotFoundException("Can't find book by id = " + requestDto.bookId()));
-        ShoppingCart shoppingCart = shoppingCartRepository.findByUserId(userId).orElseGet(() -> {
+        return shoppingCartRepository.findByUserId(userId).orElseGet(() -> {
             ShoppingCart newShoppingCart = new ShoppingCart();
             newShoppingCart.setUser(user);
             return shoppingCartRepository.save(newShoppingCart);
         });
-        Optional<CartItem> optionalCartItem = cartItemRepository
-                .findByShoppingCartIdAndBookId(shoppingCart.getId(), book.getId());
+    }
+
+    private void updateOrAddCartItem(
+            ShoppingCart shoppingCart,
+            AddToCartRequestDto requestDto
+    ) {
+        Book book = bookRepository.findById(requestDto.bookId()).orElseThrow(() ->
+                new EntityNotFoundException("Can't find book by id = " + requestDto.bookId()));
+        Optional<CartItem> optionalCartItem = shoppingCart.getCartItems().stream()
+                .filter(ci -> Objects.equals(ci.getBook().getId(), book.getId()))
+                .findFirst();
         CartItem cartItem;
         if (optionalCartItem.isPresent()) {
             cartItem = optionalCartItem.get();
@@ -55,8 +69,8 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
             cartItem.setBook(book);
             cartItem.setShoppingCart(shoppingCart);
             cartItem.setQuantity(requestDto.quantity());
+            shoppingCart.getCartItems().add(cartItem);
         }
         cartItemRepository.save(cartItem);
-        return shoppingCartMapper.toDto(shoppingCart);
     }
 }
