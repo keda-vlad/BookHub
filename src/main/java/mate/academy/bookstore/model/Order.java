@@ -1,5 +1,6 @@
 package mate.academy.bookstore.model;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -42,7 +43,7 @@ public class Order {
     private LocalDateTime orderDate;
     @Column(nullable = false, name = "shipping_address")
     private String shippingAddress;
-    @OneToMany(mappedBy = "order", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "order", fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
     private Set<OrderItem> orderItems;

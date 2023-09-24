@@ -19,7 +19,6 @@ import mate.academy.bookstore.model.OrderItem;
 import mate.academy.bookstore.model.ShoppingCart;
 import mate.academy.bookstore.repository.cartitem.CartItemRepository;
 import mate.academy.bookstore.repository.order.OrderRepository;
-import mate.academy.bookstore.repository.orderitem.OrderItemRepository;
 import mate.academy.bookstore.repository.shoppingcart.ShoppingCartRepository;
 import mate.academy.bookstore.service.OrderService;
 import org.springframework.data.domain.Pageable;
@@ -30,7 +29,6 @@ import org.springframework.stereotype.Service;
 public class OrderServiceImpl implements OrderService {
     private final OrderMapper orderMapper;
     private final OrderRepository orderRepository;
-    private final OrderItemRepository orderItemRepository;
     private final ShoppingCartRepository shoppingCartRepository;
     private final CartItemRepository cartItemRepository;
 
@@ -40,11 +38,8 @@ public class OrderServiceImpl implements OrderService {
         ShoppingCart shoppingCart = shoppingCartRepository.findByUserId(userId)
                 .orElseThrow(() -> new EntityNotFoundException(
                         "Can't find shopping cart by user id = " + userId));
-        Set<OrderItem> orderItems = buildOrderItems(shoppingCart);
-        Order order = buildOrder(shoppingCart, placeAnOrderDto, orderItems);
+        Order order = buildOrder(shoppingCart, placeAnOrderDto);
         orderRepository.save(order);
-        orderItems.forEach(oi -> oi.setOrder(order));
-        orderItemRepository.saveAll(orderItems);
         cartItemRepository.deleteAll(shoppingCart.getCartItems());
         return orderMapper.toDto(order);
     }
@@ -66,9 +61,9 @@ public class OrderServiceImpl implements OrderService {
 
     private Order buildOrder(
             ShoppingCart shoppingCart,
-            PlaceAnOrderDto placeAnOrderDto,
-            Set<OrderItem> orderItems
+            PlaceAnOrderDto placeAnOrderDto
     ) {
+        Set<OrderItem> orderItems = buildOrderItems(shoppingCart);
         if (orderItems.isEmpty()) {
             throw new OrderException("Can't create empty order");
         }
@@ -79,6 +74,7 @@ public class OrderServiceImpl implements OrderService {
         order.setTotal(calculateTotalPrice(orderItems));
         order.setOrderItems(orderItems);
         order.setShippingAddress(placeAnOrderDto.shippingAddress());
+        orderItems.forEach(oi -> oi.setOrder(order));
         return order;
     }
 
