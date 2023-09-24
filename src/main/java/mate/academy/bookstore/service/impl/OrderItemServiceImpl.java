@@ -18,16 +18,16 @@ public class OrderItemServiceImpl implements OrderItemService {
     private final OrderItemMapper orderItemMapper;
 
     @Override
-    public List<OrderItemDto> findAllByOrderId(Long orderId, Pageable pageable) {
-        return orderItemRepository.findAllByOrderId(orderId, pageable).stream()
+    public List<OrderItemDto> findAllByOrderId(Long userId, Long orderId, Pageable pageable) {
+        return orderItemRepository.findAllByUserIdAndOrderId(userId, orderId, pageable).stream()
                 .map(orderItemMapper::toDto)
                 .toList();
     }
 
     @Override
-    public OrderItemDto getByOrderIdAndItemId(Long orderId, Long itemId) {
+    public OrderItemDto getByOrderIdAndItemId(Long userId, Long orderId, Long itemId) {
         OrderItem orderItemDto = orderItemRepository
-                .findByIdAndOrderId(itemId, orderId).orElseThrow(() ->
+                .findByUserIdAndItemIdAndOrderId(userId, itemId, orderId).orElseThrow(() ->
                 new EntityNotFoundException("Can't find order item by itemId = " + itemId
                         + " and orderId = " + orderId)
         );

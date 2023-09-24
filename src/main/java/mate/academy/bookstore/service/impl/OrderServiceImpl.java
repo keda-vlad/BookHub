@@ -1,5 +1,6 @@
 package mate.academy.bookstore.service.impl;
 
+import jakarta.transaction.Transactional;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -10,6 +11,7 @@ import mate.academy.bookstore.dto.order.ChangeStatusDto;
 import mate.academy.bookstore.dto.order.OrderDto;
 import mate.academy.bookstore.dto.order.PlaceAnOrderDto;
 import mate.academy.bookstore.exception.EntityNotFoundException;
+import mate.academy.bookstore.exception.OrderException;
 import mate.academy.bookstore.mapper.OrderMapper;
 import mate.academy.bookstore.model.CartItem;
 import mate.academy.bookstore.model.Order;
@@ -32,32 +34,18 @@ public class OrderServiceImpl implements OrderService {
     private final ShoppingCartRepository shoppingCartRepository;
     private final CartItemRepository cartItemRepository;
 
+    @Transactional
     @Override
     public OrderDto placeAnOrder(Long userId, PlaceAnOrderDto placeAnOrderDto) {
-        ShoppingCart shoppingCart = shoppingCartRepository.findById(userId)
+        ShoppingCart shoppingCart = shoppingCartRepository.findByUserId(userId)
                 .orElseThrow(() -> new EntityNotFoundException(
                         "Can't find shopping cart by user id = " + userId));
-        Order order = new Order();
-        order.setOrderDate(LocalDateTime.now());
-        order.setStatus(Order.Status.PENDING);
-        order.setUser(shoppingCart.getUser());
-        order.setShippingAddress(placeAnOrderDto.shippingAddress());
-        Set<OrderItem> orderItems = shoppingCart.getCartItems().stream()
-                .map(this::buildOrderItem)
-                .collect(Collectors.toSet());
-        if (orderItems.isEmpty()) {
-            throw new EntityNotFoundException("Can't create empty order");
-        }
-        BigDecimal totalPrice = orderItems.stream()
-                .map(OrderItem::getPrice)
-                .reduce(BigDecimal::add)
-                .orElseGet(() -> BigDecimal.valueOf(0L));
-        order.setTotal(totalPrice);
+        Set<OrderItem> orderItems = buildOrderItems(shoppingCart);
+        Order order = buildOrder(shoppingCart, placeAnOrderDto, orderItems);
         orderRepository.save(order);
         orderItems.forEach(oi -> oi.setOrder(order));
         orderItemRepository.saveAll(orderItems);
         cartItemRepository.deleteAll(shoppingCart.getCartItems());
-        order.setOrderItems(orderItems);
         return orderMapper.toDto(order);
     }
 
@@ -74,6 +62,37 @@ public class OrderServiceImpl implements OrderService {
                 new EntityNotFoundException("Can't find order by id = " + id));
         order.setStatus(Order.Status.valueOf(changeStatusDto.status()));
         return orderMapper.toDto(orderRepository.save(order));
+    }
+
+    private Order buildOrder(
+            ShoppingCart shoppingCart,
+            PlaceAnOrderDto placeAnOrderDto,
+            Set<OrderItem> orderItems
+    ) {
+        if (orderItems.isEmpty()) {
+            throw new OrderException("Can't create empty order");
+        }
+        Order order = new Order();
+        order.setOrderDate(LocalDateTime.now());
+        order.setStatus(Order.Status.PENDING);
+        order.setUser(shoppingCart.getUser());
+        order.setTotal(calculateTotalPrice(orderItems));
+        order.setOrderItems(orderItems);
+        order.setShippingAddress(placeAnOrderDto.shippingAddress());
+        return order;
+    }
+
+    private BigDecimal calculateTotalPrice(Set<OrderItem> orderItems) {
+        return orderItems.stream()
+                .map(OrderItem::getPrice)
+                .reduce(BigDecimal::add)
+                .orElseGet(() -> BigDecimal.valueOf(0L));
+    }
+
+    private Set<OrderItem> buildOrderItems(ShoppingCart shoppingCart) {
+        return shoppingCart.getCartItems().stream()
+                .map(this::buildOrderItem)
+                .collect(Collectors.toSet());
     }
 
     private OrderItem buildOrderItem(CartItem cartItem) {

@@ -27,3 +27,5 @@ databaseChangeLog:
       file: db/changelog/changes/13-create-order-item-table.yaml
   - include:
       file: db/changelog/changes/14-change-order-and-order-item-tables-names.yaml
+  - include:
+      file: db/changelog/changes/15-add-foreign-keys.yaml

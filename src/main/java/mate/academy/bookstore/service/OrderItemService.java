@@ -5,7 +5,7 @@ import mate.academy.bookstore.dto.orderitem.OrderItemDto;
 import org.springframework.data.domain.Pageable;
 
 public interface OrderItemService {
-    List<OrderItemDto> findAllByOrderId(Long orderId, Pageable pageable);
+    List<OrderItemDto> findAllByOrderId(Long userId, Long orderId, Pageable pageable);
 
-    OrderItemDto getByOrderIdAndItemId(Long orderId, Long itemId);
+    OrderItemDto getByOrderIdAndItemId(Long userId, Long orderId, Long itemId);
 }
