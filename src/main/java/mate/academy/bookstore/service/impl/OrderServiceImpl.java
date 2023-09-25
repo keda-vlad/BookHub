@@ -38,7 +38,7 @@ public class OrderServiceImpl implements OrderService {
         ShoppingCart shoppingCart = shoppingCartRepository.findByUserId(userId)
                 .orElseThrow(() -> new EntityNotFoundException(
                         "Can't find shopping cart by user id = " + userId));
-        Order order = buildOrder(shoppingCart, placeAnOrderDto);
+        Order order = createOrder(shoppingCart, placeAnOrderDto);
         orderRepository.save(order);
         cartItemRepository.deleteAll(shoppingCart.getCartItems());
         return orderMapper.toDto(order);
@@ -51,6 +51,7 @@ public class OrderServiceImpl implements OrderService {
                 .toList();
     }
 
+    @Transactional
     @Override
     public OrderDto updateOrderStatus(Long id, ChangeStatusDto changeStatusDto) {
         Order order = orderRepository.findById(id).orElseThrow(() ->
@@ -59,11 +60,11 @@ public class OrderServiceImpl implements OrderService {
         return orderMapper.toDto(orderRepository.save(order));
     }
 
-    private Order buildOrder(
+    private Order createOrder(
             ShoppingCart shoppingCart,
             PlaceAnOrderDto placeAnOrderDto
     ) {
-        Set<OrderItem> orderItems = buildOrderItems(shoppingCart);
+        Set<OrderItem> orderItems = createOrderItems(shoppingCart);
         if (orderItems.isEmpty()) {
             throw new OrderException("Can't create empty order");
         }
@@ -85,13 +86,13 @@ public class OrderServiceImpl implements OrderService {
                 .orElseGet(() -> BigDecimal.valueOf(0L));
     }
 
-    private Set<OrderItem> buildOrderItems(ShoppingCart shoppingCart) {
+    private Set<OrderItem> createOrderItems(ShoppingCart shoppingCart) {
         return shoppingCart.getCartItems().stream()
-                .map(this::buildOrderItem)
+                .map(this::createOrderItem)
                 .collect(Collectors.toSet());
     }
 
-    private OrderItem buildOrderItem(CartItem cartItem) {
+    private OrderItem createOrderItem(CartItem cartItem) {
         OrderItem orderItem = new OrderItem();
         orderItem.setPrice(cartItem.getBook().getPrice()
                 .multiply(BigDecimal.valueOf(cartItem.getQuantity())));
