@@ -2,6 +2,7 @@ package mate.academy.bookstore.exception;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.NoSuchElementException;
 import lombok.Data;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpHeaders;
@@ -61,6 +62,22 @@ public class CustomGlobalExceptionHandler extends ResponseEntityExceptionHandler
             RegistrationException ex
     ) {
         ErrorBody errorBody = ErrorBody.of(HttpStatus.CONFLICT, ex.getMessage());
+        return new ResponseEntity<>(errorBody, errorBody.getStatus());
+    }
+
+    @ExceptionHandler(NoSuchElementException.class)
+    public ResponseEntity<Object> handleSpecificationNotFoundException(
+            NoSuchElementException ex
+    ) {
+        ErrorBody errorBody = ErrorBody.of(HttpStatus.CONFLICT, ex.getMessage());
+        return new ResponseEntity<>(errorBody, errorBody.getStatus());
+    }
+
+    @ExceptionHandler(OrderException.class)
+    public ResponseEntity<Object> handleSpecificationNotFoundException(
+            OrderException ex
+    ) {
+        ErrorBody errorBody = ErrorBody.of(HttpStatus.BAD_REQUEST, ex.getMessage());
         return new ResponseEntity<>(errorBody, errorBody.getStatus());
     }
 
