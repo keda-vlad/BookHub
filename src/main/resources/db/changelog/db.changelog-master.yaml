@@ -11,3 +11,13 @@ databaseChangeLog:
       file: db/changelog/changes/05-add-roles.yaml
   - include:
       file: db/changelog/changes/06-add-admin.yaml
+  - include:
+      file: db/changelog/changes/07-create-categories-table.yaml
+  - include:
+      file: db/changelog/changes/08-create-book-category-table.yaml
+  - include:
+      file: db/changelog/changes/09-add-description-to-category.yaml
+  - include:
+      file: db/changelog/changes/10-create-shopping-carts-table.yaml
+  - include:
+      file: db/changelog/changes/11-create-cart-item-table.yaml
