@@ -4,7 +4,7 @@ databaseChangeLog:
       author: kvlad
       changes:
         - createTable:
-            tableName: cart_item
+            tableName: cart_items
             columns:
               - column:
                   name: id
@@ -16,11 +16,17 @@ databaseChangeLog:
                   name: shopping_cart_id
                   type: BIGINT
                   constraints:
+                    foreignKeyName: fk_cart_item_shopping_cart_id
+                    referencedTableName: shopping_carts
+                    referencedColumnNames: user_id
                     nullable: false
               - column:
                   name: book_id
                   type: BIGINT
                   constraints:
+                    foreignKeyName: fk_cart_item_book_id
+                    referencedTableName: books
+                    referencedColumnNames: id
                     nullable: false
               - column:
                   name: quantity

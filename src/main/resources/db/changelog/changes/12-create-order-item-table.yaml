@@ -4,7 +4,7 @@ databaseChangeLog:
       author: kvlad
       changes:
         - createTable:
-            tableName: "order_item"
+            tableName: order_items
             columns:
               - column:
                   name: id
@@ -16,11 +16,17 @@ databaseChangeLog:
                   name: order_id
                   type: BIGINT
                   constraints:
+                    foreignKeyName: fk_order_items_order_id
+                    referencedTableName: orders
+                    referencedColumnNames: id
                     nullable: false
               - column:
                   name: book_id
                   type: BIGINT
                   constraints:
+                    foreignKeyName: fk_order_items_book_id
+                    referencedTableName: books
+                    referencedColumnNames: id
                     nullable: false
               - column:
                   name: quantity

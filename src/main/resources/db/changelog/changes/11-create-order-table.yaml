@@ -4,7 +4,7 @@ databaseChangeLog:
       author: kvlad
       changes:
         - createTable:
-            tableName: order
+            tableName: orders
             columns:
               - column:
                   name: id
@@ -16,6 +16,9 @@ databaseChangeLog:
                   name: user_id
                   type: BIGINT
                   constraints:
+                    foreignKeyName: fk_orders_user_id
+                    referencedTableName: users
+                    referencedColumnNames: id
                     nullable: false
               - column:
                   name: status
