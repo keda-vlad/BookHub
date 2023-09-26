@@ -1,17 +1,35 @@
 version: "3.8"
 
 services:
-  db:
+  mysqldb:
     image: mysql
-    restart: always
+    restart: on-failure
     env_file: ./.env
     ports:
-      - "3307:3306"
+      - $MYSQL_LOCAL_PORT:$MYSQL_DOCKER_PORT
     environment:
       MYSQL_ROOT_PASSWORD: $MYSQL_ROOT_PASSWORD
-      MYSQL_DATABASE: $MYSQL_DATABASE
+      MYSQL_USER: $MYSQL_USER
+      MYSQL_PASSWORD: $MYSQL_PASSWORD
+      MYSQL_DATABASE: $MYSQL_DB
     healthcheck:
-      test: ["CMD-SHELL", "mysqladmin ping -h localhost -u root -pBorn_to_sql1"]
+      test: CMD-SHELL mysqladmin ping -u root -p$MYSQL_ROOT_PASSWORD
       interval: 30s
+      start_period: 5s
       timeout: 30s
       retries: 3
+  app:
+    restart: on-failure
+    depends_on:
+      - mysqldb
+    build: .
+    image: bookstore-app
+    env_file: ./.env
+    ports:
+      - $SPRING_LOCAL_PORT:$SPRING_DOCKER_PORT
+      - $DEBUG_PORT
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysqldb:$MYSQL_DOCKER_PORT/$MYSQL_DB
+      SPRING_DATASOURCE_USERNAME: $MYSQL_USER
+      SPRING_DATASOURCE_PASSWORD: $MYSQL_PASSWORD
+      JAVA_TOOL_OPTIONS: -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:$DEBUG_PORT
