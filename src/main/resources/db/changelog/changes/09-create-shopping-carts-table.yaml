@@ -10,6 +10,10 @@ databaseChangeLog:
                   name: user_id
                   type: BIGINT
                   constraints:
+                    primaryKey: true
+                    foreignKeyName: fk_shopping_carts_user_id
+                    referencedTableName: users
+                    referencedColumnNames: id
                     nullable: false
               - column:
                   name: is_deleted

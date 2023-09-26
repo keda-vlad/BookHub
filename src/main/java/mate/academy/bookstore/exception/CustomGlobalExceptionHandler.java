@@ -73,6 +73,14 @@ public class CustomGlobalExceptionHandler extends ResponseEntityExceptionHandler
         return new ResponseEntity<>(errorBody, errorBody.getStatus());
     }
 
+    @ExceptionHandler(OrderException.class)
+    public ResponseEntity<Object> handleSpecificationNotFoundException(
+            OrderException ex
+    ) {
+        ErrorBody errorBody = ErrorBody.of(HttpStatus.BAD_REQUEST, ex.getMessage());
+        return new ResponseEntity<>(errorBody, errorBody.getStatus());
+    }
+
     private String getErrorMessage(ObjectError objectError) {
         if (objectError instanceof FieldError) {
             String field = ((FieldError) objectError).getField();

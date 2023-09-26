@@ -22,10 +22,10 @@ public interface BookRepository extends JpaRepository<Book, Long>, JpaSpecificat
     List<Book> findAllWithCategories(Specification<Book> bookSpecification, Pageable pageable);
 
     @Query("""
-            SELECT DISTINCT b
-            FROM Book b
-            LEFT JOIN FETCH b.categories
+            SELECT DISTINCT b 
+            FROM Book b 
+            LEFT JOIN FETCH b.categories 
             WHERE b.id = :id
-               """)
+            """)
     Optional<Book> findByIdWithCategories(Long id);
 }

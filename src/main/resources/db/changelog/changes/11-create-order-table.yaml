@@ -1,10 +1,10 @@
 databaseChangeLog:
   - changeSet:
-      id: create-shopping-carts-table
+      id: create-order-table
       author: kvlad
       changes:
         - createTable:
-            tableName: cart_item
+            tableName: orders
             columns:
               - column:
                   name: id
@@ -13,18 +13,31 @@ databaseChangeLog:
                   constraints:
                     primaryKey: true
               - column:
-                  name: shopping_cart_id
+                  name: user_id
                   type: BIGINT
+                  constraints:
+                    foreignKeyName: fk_orders_user_id
+                    referencedTableName: users
+                    referencedColumnNames: id
+                    nullable: false
+              - column:
+                  name: status
+                  type: VARCHAR(255)
                   constraints:
                     nullable: false
               - column:
-                  name: book_id
-                  type: BIGINT
+                  name: total
+                  type: DECIMAL(10, 2)
                   constraints:
                     nullable: false
               - column:
-                  name: quantity
-                  type: INTEGER
+                  name: order_date
+                  type: DATETIME
+                  constraints:
+                    nullable: false
+              - column:
+                  name: shipping_address
+                  type: VARCHAR(255)
                   constraints:
                     nullable: false
               - column:
