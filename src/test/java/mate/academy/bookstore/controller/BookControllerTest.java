@@ -129,8 +129,9 @@ class BookControllerTest {
     @Test
     @DisplayName("Verify search() method works for BookController")
     void searchBooks_ValidRequestDto_ReturnBookDtoList() throws Exception {
-        List<BookDto> expected = List.of(validBookDto(allBooksFromDb().get(0)));
-        BookSearchParametersDto requestDto = validAuthorSearch(expected.get(0).getAuthor());
+        Book book = allBooksFromDb().get(0);
+        List<BookDto> expected = List.of(validBookDto(book));
+        BookSearchParametersDto requestDto = validAuthorSearch(book);
         String jsonRequest = objectMapper.writeValueAsString(requestDto);
 
         MvcResult result = mockMvc.perform(
@@ -294,11 +295,11 @@ class BookControllerTest {
                 .setCategories(categoriesId);
     }
 
-    private BookSearchParametersDto validAuthorSearch(String... strings) {
+    private BookSearchParametersDto validAuthorSearch(Book book) {
         return new BookSearchParametersDto(
-                null,
-                strings,
-                null
+                new String[]{book.getTitle()},
+                new String[]{book.getAuthor()},
+                new String[]{book.getPrice() + ""}
         );
     }
 }
