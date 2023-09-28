@@ -20,7 +20,7 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public List<CategoryDto> findAll(Pageable pageable) {
-        return categoryRepository.findAll().stream()
+        return categoryRepository.findAll(pageable).stream()
                 .map(categoryMapper::toDto)
                 .toList();
     }
@@ -34,14 +34,14 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public CategoryDto save(RequestCategoryDto categoryDto) {
-        Category category = categoryMapper.toEntity(categoryDto);
+        Category category = categoryMapper.toModel(categoryDto);
         category = categoryRepository.save(category);
         return categoryMapper.toDto(category);
     }
 
     @Override
     public CategoryDto update(Long id, RequestCategoryDto categoryDto) {
-        Category category = categoryMapper.toEntity(categoryDto);
+        Category category = categoryMapper.toModel(categoryDto);
         category.setId(id);
         category = categoryRepository.save(category);
         return categoryMapper.toDto(category);

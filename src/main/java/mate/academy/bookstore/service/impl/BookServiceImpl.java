@@ -53,11 +53,11 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public void update(Long id, CreateBookRequestDto requestDto) {
+    public BookDto update(Long id, CreateBookRequestDto requestDto) {
         Book book = bookMapper.toModel(requestDto);
         book.setId(id);
         book.setCategories(categoryRepository.findAllByIdIn(requestDto.categories()));
-        bookRepository.save(book);
+        return bookMapper.toDto(bookRepository.save(book));
     }
 
     @Override
@@ -67,7 +67,7 @@ public class BookServiceImpl implements BookService {
     ) {
         Specification<Book> bookSpecification =
                 bookSpecificationBuilder.build(bookSearchParametersDto);
-        return bookRepository.findAllWithCategories(bookSpecification, pageable).stream()
+        return bookRepository.findAll(bookSpecification, pageable).stream()
                 .map(bookMapper::toDto)
                 .toList();
     }
