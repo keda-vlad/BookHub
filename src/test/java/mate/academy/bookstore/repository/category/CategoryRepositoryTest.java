@@ -26,7 +26,7 @@ class CategoryRepositoryTest {
     @Sql(scripts = {
             "classpath:database/category/remove-three-categories.sql"
     }, executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
-    void findAllByCategoryId_ValidCategoryIdAndPageable_returnBookList() {
+    void findAllByCategoryId_ValidCategoryIdAndPageable_ReturnBookList() {
         Set<Category> actual = categoryRepository.findAllByIdIn(List.of(1L, 2L));
         Assertions.assertEquals(2, actual.size());
         actual = actual.stream()
