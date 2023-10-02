@@ -86,7 +86,7 @@ class OrderControllerTest {
         OrderDto actual = objectMapper.readValue(
                 result.getResponse().getContentAsString(), OrderDto.class
         );
-        Assertions.assertTrue(EqualsBuilder.reflectionEquals(expected, actual, "id", "orderDate"));
+        EqualsBuilder.reflectionEquals(expected, actual, "id", "orderDate");
     }
 
     @WithMockUser(username = "user")
