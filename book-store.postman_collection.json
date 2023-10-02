@@ -1,0 +1,499 @@
+{
+	"info": {
+		"_postman_id": "f313e192-ff71-49be-9f77-4d07c6546c5b",
+		"name": "book-store",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+		"_exporter_id": "29491495"
+	},
+	"item": [
+		{
+			"name": "admin",
+			"item": [
+				{
+					"name": "/order",
+					"item": [
+						{
+							"name": "update-order-status",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": {
+										"token": "{{JWT_TOKEN}}"
+									}
+								},
+								"method": "PATCH",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"status\": \"DELIVERED\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "http://localhost:8080/api/orders/3"
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "/books",
+					"item": [
+						{
+							"name": "add-book",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": {
+										"token": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbkBleGFtcGxlLmNvbSIsImlhdCI6MTY5NTA2NjAwNiwiZXhwIjoxNjk1MDY5MDA2fQ.5JncYEOzZvnmsE_ghjy4CnoKnMXiQjlA7obKCxsUQCs"
+									}
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"isbn\": \"9780395647400\",\r\n  \"price\": 199.99,\r\n  \"author\": \"someAuthguhjklor11212\",\r\n  \"title\": \"someTitle1mnjbh2132у332\",\r\n  \"description\": \"description 122\",\r\n  \"coverImage\": \"https://example.com/updated-cover-image.jpg 4\",\r\n  \"categories\": [1,2]\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "http://localhost:8080/api/books"
+							},
+							"response": []
+						},
+						{
+							"name": "update-book",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": {
+										"token": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbkBleGFtcGxlLmNvbSIsImlhdCI6MTY5NDczMzY5NCwiZXhwIjoxNjk0NzM2Njk0fQ.nANWH9A6O_5ZL4rkXnwjfbGvPDoyjdgms4ad6Q9ibZ0"
+									}
+								},
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"title\": \"tt222\",\r\n  \"author\": \"aa\",\r\n  \"isbn\": \"978-0439139601\",\r\n  \"price\": 19.99,\r\n  \"categories\": [1]\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "http://localhost:8080/api/books/3"
+							},
+							"response": []
+						},
+						{
+							"name": "delete-book",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": {
+										"token": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbkBleGFtcGxlLmNvbSIsImlhdCI6MTY5NDczNDE4MCwiZXhwIjoxNjk0NzM3MTgwfQ.JnbDqh1LNRdzKw8erZ40JQBnSJPuIVcnWZqz9ue1Jjc"
+									}
+								},
+								"method": "DELETE",
+								"header": [],
+								"url": "http://localhost:8080/api/books/3"
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "/categories",
+					"item": [
+						{
+							"name": "add-category",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": {
+										"token": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbkBleGFtcGxlLmNvbSIsImlhdCI6MTY5NDY4MDA1NywiZXhwIjoxNjk0NjgzMDU3fQ.hLjwxA_EqcIIJVDjAXDiYAse-FhqgMn9MPOJVkW-d8s"
+									}
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"name\": \"category2\",\r\n    \"description\": \"description2\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "http://localhost:8080/api/category"
+							},
+							"response": []
+						},
+						{
+							"name": "update-category",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": {
+										"token": "{{JWT_TOKEN}}"
+									}
+								},
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"name\":\"si-fi\",\r\n    \"description\":\"wooow its si-fi\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "http://localhost:8080/api/categories/1"
+							},
+							"response": []
+						},
+						{
+							"name": "delete",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": {
+										"token": "{{JWT_TOKEN}}"
+									}
+								},
+								"method": "DELETE",
+								"header": [],
+								"url": "http://localhost:8080/api/categories/3"
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "admin login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = pm.response.json();",
+									"var jwtToken = jsonData.token;",
+									"pm.environment.set('JWT_TOKEN', jwtToken);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"admin@example.com\",\r\n    \"password\": \"admin\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:8080/api/auth/login"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "user",
+			"item": [
+				{
+					"name": "/order",
+					"item": [
+						{
+							"name": "get-all-orders",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": {
+										"token": "{{JWT_TOKEN}}"
+									}
+								},
+								"method": "GET",
+								"header": [],
+								"url": "http://localhost:8080/api/orders"
+							},
+							"response": []
+						},
+						{
+							"name": "build-order",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": {
+										"token": "{{JWT_TOKEN}}"
+									}
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"shippingAddress\": \"Kyiv, Shevchenko ave, 1\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "http://localhost:8080/api/orders"
+							},
+							"response": []
+						},
+						{
+							"name": "get-all-order-items-by-order-id",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": {
+										"token": "{{JWT_TOKEN}}"
+									}
+								},
+								"method": "GET",
+								"header": [],
+								"url": "http://localhost:8080/api/orders/3/items"
+							},
+							"response": []
+						},
+						{
+							"name": "get-order-item-by-order-id-and-item-id",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": {
+										"token": "{{JWT_TOKEN}}"
+									}
+								},
+								"method": "GET",
+								"header": [],
+								"url": "http://localhost:8080/api/orders/3/items/1"
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "/auth",
+					"item": [
+						{
+							"name": "registrate-user",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"email\": \"user6@example.com\",\r\n    \"password\": \"useruser1\",\r\n    \"repeatPassword\": \"useruser1\",\r\n    \"firstName\": \"Frodo\",\r\n    \"lastName\": \"Bagins\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "http://localhost:8080/api/auth/register"
+							},
+							"response": []
+						},
+						{
+							"name": "user login",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"email\": \"user7@example.com\",\r\n    \"password\": \"useruser1\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "http://localhost:8080/api/auth/login"
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "/books",
+					"item": [
+						{
+							"name": "get-all-books",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": {
+										"token": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbkBleGFtcGxlLmNvbSIsImlhdCI6MTY5NTIxMTQxOCwiZXhwIjoxNjk1MjE0NDE4fQ.zs_ATjkegd7ZzWBFIUaiAsCgLi0_FU9OSGcQdd7tPrc"
+									}
+								},
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"bookId\":1,\r\n    \"quantity\":1\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "http://localhost:8080/api/books"
+							},
+							"response": []
+						},
+						{
+							"name": "get-book-by-id",
+							"request": {
+								"method": "GET",
+								"header": []
+							},
+							"response": []
+						},
+						{
+							"name": "search",
+							"request": {
+								"method": "GET",
+								"header": []
+							},
+							"response": []
+						},
+						{
+							"name": "get-page",
+							"request": {
+								"method": "GET",
+								"header": []
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "/categories",
+					"item": [
+						{
+							"name": "get-categories",
+							"request": {
+								"method": "GET",
+								"header": []
+							},
+							"response": []
+						},
+						{
+							"name": "get-category-by-id",
+							"request": {
+								"method": "GET",
+								"header": []
+							},
+							"response": []
+						},
+						{
+							"name": "get-books-by-category",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": {
+										"token": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbkBleGFtcGxlLmNvbSIsImlhdCI6MTY5NTA2NTg0OSwiZXhwIjoxNjk1MDY4ODQ5fQ.C9SVMbe9B37cNyVP8P99szPBoaEm9cHbm9NcjFTC2z4"
+									}
+								},
+								"method": "GET",
+								"header": [],
+								"url": "http://localhost:8080/api/category/1/books"
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "/cart",
+					"item": [
+						{
+							"name": "Add-book-to-cart",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": {
+										"token": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbkBleGFtcGxlLmNvbSIsImlhdCI6MTY5NTIxMTQxOCwiZXhwIjoxNjk1MjE0NDE4fQ.zs_ATjkegd7ZzWBFIUaiAsCgLi0_FU9OSGcQdd7tPrc"
+									}
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"bookId\":8,\r\n    \"quantity\":8\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "http://localhost:8080/api/cart"
+							},
+							"response": []
+						},
+						{
+							"name": "get-cart",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": {
+										"token": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbkBleGFtcGxlLmNvbSIsImlhdCI6MTY5NTA2NjU3OSwiZXhwIjoxNjk1MDY5NTc5fQ.mma9VRpivb1FN-S99eJ3h1lTn-dLK5BtgmuH_27lr2I"
+									}
+								},
+								"method": "GET",
+								"header": [],
+								"url": "http://localhost:8080/api/category"
+							},
+							"response": []
+						},
+						{
+							"name": "change-quantity",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": {
+										"token": "{{JWT_TOKEN}}"
+									}
+								},
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"quantity\":10\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "http://localhost:8080/api/cart/cart-items/10"
+							},
+							"response": []
+						},
+						{
+							"name": "delete-cart-item",
+							"request": {
+								"method": "GET",
+								"header": []
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		}
+	]
+}
