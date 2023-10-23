@@ -1,5 +1,8 @@
 package mate.academy.bookstore.repository.category;
 
+import static mate.academy.bookstore.util.TestCategoryProvider.threeCategoriesFromDb;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -26,7 +29,7 @@ class CategoryRepositoryTest {
     @Sql(scripts = {
             "classpath:database/category/remove-three-categories.sql"
     }, executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
-    void findAllByCategoryId_ValidCategoryIdAndPageable_ReturnBookList() {
+    void findAllByCategoryId_ValidCategoryIdAndPageable_returnBookList() {
         Set<Category> actual = categoryRepository.findAllByIdIn(List.of(1L, 2L));
         Assertions.assertEquals(2, actual.size());
         actual = actual.stream()

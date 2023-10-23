@@ -23,6 +23,9 @@ import org.springframework.web.context.WebApplicationContext;
 import org.testcontainers.shaded.com.github.dockerjava.core.MediaType;
 import org.testcontainers.shaded.org.apache.commons.lang3.builder.EqualsBuilder;
 
+import static org.junit.jupiter.api.Assertions.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class AuthenticationControllerTest {
     private static MockMvc mockMvc;
@@ -47,7 +50,7 @@ class AuthenticationControllerTest {
         UserLoginRequestDto requestDto = new UserLoginRequestDto("admin@example.com", "admin");
         String jsonRequest = objectMapper.writeValueAsString(requestDto);
         MvcResult result = mockMvc.perform(
-                        MockMvcRequestBuilders.post("/auth/login")
+                        post("/auth/login")
                                 .contentType(MediaType.APPLICATION_JSON.getMediaType())
                                 .content(jsonRequest)
                 )
@@ -57,8 +60,8 @@ class AuthenticationControllerTest {
         UserLoginResponseDto actual = objectMapper.readValue(
                 result.getResponse().getContentAsByteArray(), UserLoginResponseDto.class
         );
-        Assertions.assertNotNull(actual);
-        Assertions.assertNotNull(actual.token());
+        assertNotNull(actual);
+        assertNotNull(actual.token());
     }
 
     @DisplayName("Verify register() method works for AuthenticationController")
@@ -68,23 +71,11 @@ class AuthenticationControllerTest {
             "classpath:database/user/remove-registered-user.sql"
     }, executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     void register_ValidRequestDto_ReturnUserRegistrationResponseDto() throws Exception {
-        UserRegistrationRequestDto requestDto = new UserRegistrationRequestDto(
-                "somenew@example.com",
-                "someNewPassword",
-                "someNewPassword",
-                "someFirstName",
-                "someLastName",
-                "someAddress");
-        UserRegistrationResponseDto expected = new UserRegistrationResponseDto(
-                2L,
-                "somenew@example.com",
-                "someFirstName",
-                "someLastName",
-                "someAddress"
-        );
+        UserRegistrationRequestDto requestDto = validRegistrationRequest();
+        UserRegistrationResponseDto expected = validRegistrationResponse();
         String jsonRequest = objectMapper.writeValueAsString(requestDto);
         MvcResult result = mockMvc.perform(
-                        MockMvcRequestBuilders.post("/auth/register")
+                        post("/auth/register")
                                 .contentType(MediaType.APPLICATION_JSON.getMediaType())
                                 .content(jsonRequest)
                 )
@@ -94,7 +85,27 @@ class AuthenticationControllerTest {
         UserRegistrationResponseDto actual = objectMapper.readValue(
                 result.getResponse().getContentAsByteArray(), UserRegistrationResponseDto.class
         );
-        System.out.println(actual);
-        Assertions.assertTrue(EqualsBuilder.reflectionEquals(expected, actual, "id"));
+        assertTrue(EqualsBuilder.reflectionEquals(expected, actual, "id"));
+    }
+
+    private UserRegistrationRequestDto validRegistrationRequest() {
+        return new UserRegistrationRequestDto(
+                "somenew@example.com",
+                "someNewPassword",
+                "someNewPassword",
+                "someFirstName",
+                "someLastName",
+                "someAddress");
+    }
+
+
+    private UserRegistrationResponseDto validRegistrationResponse() {
+        return new UserRegistrationResponseDto(
+                2L,
+                "somenew@example.com",
+                "someFirstName",
+                "someLastName",
+                "someAddress"
+        );
     }
 }
