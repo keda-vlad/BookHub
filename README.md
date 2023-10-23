@@ -6,7 +6,7 @@ Welcome to the Bookstore API project! Our powerful and secure application, devel
 
 ### Security:
 
-In our application, we use JWT tokens to ensure secure authentication and authorization. This guarantees that only verified users can access sensitive features.
+Bookstore uses JWT tokens to ensure secure authentication and authorization. This guarantees that only verified users can access sensitive features.
 
 ### Books and Categories:
 
@@ -62,22 +62,29 @@ Follow these steps to set up and run the Book Store API on your local machine:
     - Select "File" -> "New Project from Version Control."
     - Paste the link: https://github.com/keda-vlad/bookstore.git
     - Run the following commands:
-        - `mvn clean package`
-        - `docker build -t your_image_name`
-        - `docker-compose up --build`
+
+        mvn clean package
+        docker build -t your_image_name
+        docker-compose up --build
 
    Via the console:
     - Execute the command: `git clone https://github.com/keda-vlad/bookstore.git`
     - Run the following commands:
-        - `mvn clean install`
-        - `docker build -t your_image_name`
-        - `docker-compose up --build`
+
+        mvn clean install
+        docker build -t your_image_name
+        docker-compose up --build
 
 ## Usage
-    - Postman:
-        - Open Postman.
-        - Import the [file](book-store.postman_collection.json) with requests.
+   If you want test Api without installation go to [link](http://ec2-54-82-60-253.compute-1.amazonaws.com/api/swagger-ui/index.html#/Authentication%20management/login).
 
+   
+   Or you can use Postman, if you completed installation:
+
+   - Open Postman.
+   - Import the [file](book-store.postman_collection.json) with requests.
+## Video Presentation
+In this [video](https://www.loom.com/share/19bad7530e49408dbd6e78cc9c209a67?sid=d4630fee-e404-45b8-a501-a45911e13071), you'll get a comprehensive demonstration of how the application functions. We'll explore the intricacies of searching for books and categories, the admin's capacity to modify them, the features available to users, and the mechanics behind the shopping cart and order processes.
 ## Contribution
 
    ### Issues and Solutions
@@ -97,7 +104,7 @@ Follow these steps to set up and run the Book Store API on your local machine:
 
    ### Upcoming Expected Updates:
 
-   We plan to add user recommendation functionality.
+   I plan to add user recommendation functionality.
 
 ## Contact Us:
 
