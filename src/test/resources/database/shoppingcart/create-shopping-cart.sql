@@ -5,4 +5,4 @@ INSERT INTO books (id, title, author, isbn, price, is_deleted) VALUES
 INSERT INTO shopping_carts (user_id, is_deleted) VALUES
     (17, false);
 INSERT INTO cart_item (id, shopping_cart_id, book_id, quantity, is_deleted) VALUES
-    (1, 17, 1, 1, false);
+    (1, 17, 1, 10, false);

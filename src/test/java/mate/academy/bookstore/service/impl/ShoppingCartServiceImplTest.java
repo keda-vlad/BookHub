@@ -1,9 +1,22 @@
 package mate.academy.bookstore.service.impl;
 
+import static mate.academy.bookstore.util.TestBookProvider.validBook;
+import static mate.academy.bookstore.util.TestShoppingCartProvider.validAddToCartRequestDto;
+import static mate.academy.bookstore.util.TestShoppingCartProvider.validShoppingCart;
+import static mate.academy.bookstore.util.TestShoppingCartProvider.validShoppingCartDto;
+import static mate.academy.bookstore.util.TestUserProvider.validUser;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.any;
+import static org.mockito.Mockito.anyLong;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
+import static org.mockito.Mockito.when;
+
 import java.util.Optional;
-import java.util.Set;
 import mate.academy.bookstore.dto.cartitem.AddToCartRequestDto;
-import mate.academy.bookstore.dto.cartitem.CartItemDto;
 import mate.academy.bookstore.dto.shoppingcarts.ShoppingCartDto;
 import mate.academy.bookstore.exception.EntityNotFoundException;
 import mate.academy.bookstore.mapper.ShoppingCartMapper;
@@ -15,13 +28,11 @@ import mate.academy.bookstore.repository.book.BookRepository;
 import mate.academy.bookstore.repository.cartitem.CartItemRepository;
 import mate.academy.bookstore.repository.shoppingcart.ShoppingCartRepository;
 import mate.academy.bookstore.repository.user.UserRepository;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
@@ -42,41 +53,35 @@ class ShoppingCartServiceImplTest {
     @Test
     @DisplayName("Verify getById() method works for ShoppingCartServiceImpl")
     public void getShoppingCartById_ValidId_ReturnShoppingCartDto() {
-        //Given
-        Long id = 1L;
-        ShoppingCart shoppingCart = new ShoppingCart().setId(id);
-        ShoppingCartDto shoppingCartDto = new ShoppingCartDto(id, id, Set.of());
+        Long id = 17L;
+        ShoppingCart shoppingCart = validShoppingCart();
+        ShoppingCartDto shoppingCartDto = validShoppingCartDto();
 
-        Mockito.when(shoppingCartRepository.findByUserId(id))
+        when(shoppingCartRepository.findByUserId(id))
                 .thenReturn(Optional.of(shoppingCart));
-        Mockito.when(shoppingCartMapper.toDto(shoppingCart))
+        when(shoppingCartMapper.toDto(shoppingCart))
                 .thenReturn(shoppingCartDto);
 
-        //When
         ShoppingCartDto actualShoppingCartDto = shoppingCartService.getById(id);
 
-        //Then
-        Assertions.assertEquals(shoppingCartDto, actualShoppingCartDto);
-        Mockito.verify(shoppingCartMapper, Mockito.times(1)).toDto(Mockito.any());
-        Mockito.verify(shoppingCartRepository, Mockito.times(1)).findByUserId(Mockito.any());
-        Mockito.verifyNoMoreInteractions(shoppingCartMapper, shoppingCartRepository);
+        assertEquals(shoppingCartDto, actualShoppingCartDto);
+        verify(shoppingCartMapper, times(1)).toDto(any());
+        verify(shoppingCartRepository, times(1)).findByUserId(any());
+        verifyNoMoreInteractions(shoppingCartMapper, shoppingCartRepository);
     }
 
     @Test
     @DisplayName("Verify the expected getById() exception occurs for ShoppingCartServiceImpl")
     public void getBookById_InvalidId_ThrowEntityNotFoundException() {
-        //Given
-        Mockito.when(shoppingCartRepository.findByUserId(Mockito.anyLong()))
+        when(shoppingCartRepository.findByUserId(anyLong()))
                 .thenReturn(Optional.empty());
 
-        //When
-        Exception exception = Assertions.assertThrows(
+        Exception exception = assertThrows(
                 EntityNotFoundException.class, () -> shoppingCartService.getById(100L));
 
-        //Then
-        Assertions.assertEquals("Can't find shopping cart by id = 100", exception.getMessage());
-        Mockito.verify(shoppingCartRepository, Mockito.times(1)).findByUserId(Mockito.any());
-        Mockito.verifyNoMoreInteractions(shoppingCartRepository);
+        assertEquals("Can't find shopping cart by id = 100", exception.getMessage());
+        verify(shoppingCartRepository, times(1)).findByUserId(any());
+        verifyNoMoreInteractions(shoppingCartRepository);
     }
 
     @Test
@@ -85,62 +90,39 @@ class ShoppingCartServiceImplTest {
     add new cartItem to existed shopping cart
                 """)
     public void updateShoppingCart_ValidIdAndRequestDto_ReturnShoppingCartDto() {
-        //Given
-        Long id = 1L;
-        User user = new User().setId(id);
-        Book book = new Book().setId(id);
-        AddToCartRequestDto addToCartRequestDto = new AddToCartRequestDto(
-                book.getId(),
-                10
-        );
-        CartItem cartItem = new CartItem().setId(id)
-                .setBook(book)
-                .setQuantity(addToCartRequestDto.quantity());
-        CartItemDto cartItemDto = new CartItemDto(
-                cartItem.getId(),
-                book.getId(),
-                book.getTitle(),
-                10
-        );
+        Long id = 12L;
+        User user = validUser();
+        Book book = validBook();
+        AddToCartRequestDto addToCartRequestDto = validAddToCartRequestDto();
+        ShoppingCart shoppingCart = validShoppingCart();
+        ShoppingCartDto shoppingCartDto = validShoppingCartDto();
 
-        ShoppingCart shoppingCart = new ShoppingCart().setId(id).setCartItems(Set.of(cartItem));
-        ShoppingCartDto shoppingCartDto = new ShoppingCartDto(
-                id, user.getId(), Set.of(cartItemDto)
-        );
-
-        Mockito.when(userRepository.findById(id))
+        when(userRepository.findById(any()))
                 .thenReturn(Optional.of(user));
-        Mockito.when(shoppingCartRepository.findByUserId(id))
+        when(shoppingCartRepository.findByUserId(any()))
                 .thenReturn(Optional.of(shoppingCart));
-        Mockito.when(bookRepository.findById(id))
+        when(bookRepository.findById(any()))
                 .thenReturn(Optional.of(book));
-        Mockito.when(cartItemRepository.save(Mockito.any()))
-                .thenReturn(Mockito.any());
-        Mockito.when(shoppingCartMapper.toDto(shoppingCart))
+        when(cartItemRepository.save(any()))
+                .thenReturn(any());
+        when(shoppingCartMapper.toDto(shoppingCart))
                 .thenReturn(shoppingCartDto);
 
-        //When
         ShoppingCartDto actualShoppingCartDto = shoppingCartService
                 .addToCart(addToCartRequestDto, id);
 
-        //Then
-        Assertions.assertEquals(shoppingCartDto, actualShoppingCartDto);
-        Assertions.assertTrue(shoppingCartDto.cartItems().stream().findFirst().isPresent());
-        Assertions.assertEquals(
+        assertEquals(shoppingCartDto, actualShoppingCartDto);
+        assertTrue(shoppingCartDto.cartItems().stream().findFirst().isPresent());
+        assertEquals(
                 10,
                 shoppingCartDto.cartItems().stream().findFirst().get().quantity()
         );
-        Mockito.verify(userRepository, Mockito.times(1))
-                .findById(Mockito.any());
-        Mockito.verify(shoppingCartRepository, Mockito.times(1))
-                .findByUserId(Mockito.anyLong());
-        Mockito.verify(bookRepository, Mockito.times(1))
-                .findById(Mockito.anyLong());
-        Mockito.verify(cartItemRepository, Mockito.times(1))
-                .save(Mockito.any());
-        Mockito.verify(shoppingCartMapper, Mockito.times(1))
-                .toDto(Mockito.any());
-        Mockito.verifyNoMoreInteractions(
+        verify(userRepository).findById(any());
+        verify(shoppingCartRepository).findByUserId(anyLong());
+        verify(bookRepository).findById(anyLong());
+        verify(cartItemRepository).save(any());
+        verify(shoppingCartMapper).toDto(any());
+        verifyNoMoreInteractions(
                 userRepository, cartItemRepository, shoppingCartMapper, bookRepository);
     }
 
@@ -150,48 +132,37 @@ class ShoppingCartServiceImplTest {
     create new shopping cart
                 """)
     public void createShoppingCart_ValidIdAndRequestDto_ReturnShoppingCartDto() {
-        //Given
-        Long id = 1L;
-        User user = new User().setId(id);
-        Book book = new Book().setId(id);
-        ShoppingCart shoppingCart = new ShoppingCart().setId(id);
-        ShoppingCartDto shoppingCartDto = new ShoppingCartDto(id, user.getId(), Set.of());
-        AddToCartRequestDto addToCartRequestDto = new AddToCartRequestDto(
-                book.getId(),
-                10
-        );
-        Mockito.when(userRepository.findById(id))
+        Long id = 17L;
+        User user = validUser();
+        Book book = validBook();
+        AddToCartRequestDto addToCartRequestDto = validAddToCartRequestDto();
+        ShoppingCart shoppingCart = validShoppingCart();
+        ShoppingCartDto shoppingCartDto = validShoppingCartDto();
+
+        when(userRepository.findById(anyLong()))
                 .thenReturn(Optional.of(user));
-        Mockito.when(shoppingCartRepository.findByUserId(id))
+        when(shoppingCartRepository.findByUserId(anyLong()))
                 .thenReturn(Optional.empty());
-        Mockito.when(shoppingCartRepository.save(Mockito.any()))
+        when(shoppingCartRepository.save(any()))
                 .thenReturn(shoppingCart);
-        Mockito.when(bookRepository.findById(id))
+        when(bookRepository.findById(anyLong()))
                 .thenReturn(Optional.of(book));
-        Mockito.when(cartItemRepository.save(Mockito.any()))
-                .thenReturn(Mockito.any());
-        Mockito.when(shoppingCartMapper.toDto(shoppingCart))
+        when(cartItemRepository.save(any()))
+                .thenReturn(any());
+        when(shoppingCartMapper.toDto(shoppingCart))
                 .thenReturn(shoppingCartDto);
 
-        //When
         ShoppingCartDto actualShoppingCartDto = shoppingCartService
                 .addToCart(addToCartRequestDto, id);
 
-        //Then
-        Assertions.assertEquals(shoppingCartDto, actualShoppingCartDto);
-        Mockito.verify(userRepository, Mockito.times(1))
-                .findById(Mockito.any());
-        Mockito.verify(userRepository, Mockito.times(1))
-                .findById(Mockito.any());
-        Mockito.verify(shoppingCartRepository, Mockito.times(1))
-                .findByUserId(Mockito.anyLong());
-        Mockito.verify(bookRepository, Mockito.times(1))
-                .findById(Mockito.anyLong());
-        Mockito.verify(cartItemRepository, Mockito.times(1))
-                .save(Mockito.any());
-        Mockito.verify(shoppingCartMapper, Mockito.times(1))
-                .toDto(Mockito.any());
-        Mockito.verifyNoMoreInteractions(
+        assertEquals(shoppingCartDto, actualShoppingCartDto);
+        verify(userRepository).findById(any());
+        verify(userRepository).findById(any());
+        verify(shoppingCartRepository).findByUserId(anyLong());
+        verify(bookRepository).findById(anyLong());
+        verify(cartItemRepository).save(any());
+        verify(shoppingCartMapper).toDto(any());
+        verifyNoMoreInteractions(
                 userRepository, cartItemRepository, shoppingCartMapper, bookRepository);
     }
 
@@ -201,101 +172,78 @@ class ShoppingCartServiceImplTest {
                     update quantity in cart item if book already in cart
                     """)
     public void updateCartItemInShoppingCart_ValidIdAndRequestDto_ReturnShoppingCartDto() {
-        //Given
         Long id = 1L;
-        User user = new User().setId(id);
-        Book book = new Book().setId(id);
-        ShoppingCart shoppingCart = new ShoppingCart().setId(id);
-        ShoppingCartDto shoppingCartDto = new ShoppingCartDto(id, user.getId(), Set.of());
-        AddToCartRequestDto addToCartRequestDto = new AddToCartRequestDto(
-                book.getId(),
-                10
-        );
-        Mockito.when(userRepository.findById(id))
-                .thenReturn(Optional.of(user));
-        Mockito.when(shoppingCartRepository.findByUserId(id))
-                .thenReturn(Optional.empty());
-        Mockito.when(shoppingCartRepository.save(Mockito.any()))
-                .thenReturn(shoppingCart);
-        Mockito.when(bookRepository.findById(id))
-                .thenReturn(Optional.of(book));
-        Mockito.when(cartItemRepository.save(Mockito.any()))
-                .thenReturn(Mockito.any());
-        Mockito.when(shoppingCartMapper.toDto(shoppingCart))
-                .thenReturn(shoppingCartDto);
+        User user = validUser();
+        Book book = validBook();
+        AddToCartRequestDto addToCartRequestDto = validAddToCartRequestDto();
+        ShoppingCart shoppingCart = validShoppingCart();
+        ShoppingCartDto shoppingCartDto = validShoppingCartDto();
 
-        //When
+        when(userRepository.findById(any())).thenReturn(Optional.of(user));
+        when(shoppingCartRepository.findByUserId(any())).thenReturn(Optional.empty());
+        when(shoppingCartRepository.save(any())).thenReturn(shoppingCart);
+        when(bookRepository.findById(any())).thenReturn(Optional.of(book));
+        when(cartItemRepository.save(any(CartItem.class))).thenReturn(new CartItem());
+        when(shoppingCartMapper.toDto(any(ShoppingCart.class))).thenReturn(shoppingCartDto);
+
         ShoppingCartDto actualShoppingCartDto = shoppingCartService
                 .addToCart(addToCartRequestDto, id);
 
-        //Then
-        Assertions.assertEquals(shoppingCartDto, actualShoppingCartDto);
-        Mockito.verify(userRepository, Mockito.times(1))
-                .findById(Mockito.any());
-        Mockito.verify(userRepository, Mockito.times(1))
-                .findById(Mockito.any());
-        Mockito.verify(shoppingCartRepository, Mockito.times(1))
-                .findByUserId(Mockito.anyLong());
-        Mockito.verify(bookRepository, Mockito.times(1))
-                .findById(Mockito.anyLong());
-        Mockito.verify(cartItemRepository, Mockito.times(1))
-                .save(Mockito.any());
-        Mockito.verify(shoppingCartMapper, Mockito.times(1))
-                .toDto(Mockito.any());
-        Mockito.verifyNoMoreInteractions(
+        assertEquals(shoppingCartDto, actualShoppingCartDto);
+        verify(userRepository).findById(any());
+        verify(userRepository).findById(any());
+        verify(shoppingCartRepository).findByUserId(anyLong());
+        verify(bookRepository).findById(anyLong());
+        verify(cartItemRepository).save(any());
+        verify(shoppingCartMapper).toDto(any());
+        verifyNoMoreInteractions(
                 userRepository, cartItemRepository, shoppingCartMapper, bookRepository);
     }
 
     @Test
     @DisplayName("Verify the expected addToCart() exception occurs for ShoppingCartServiceImpl")
     public void addToCart_InvalidUserId_ThrowEntityNotFoundException() {
-        //Given
-        Mockito.when(userRepository.findById(Mockito.anyLong()))
+        when(userRepository.findById(anyLong()))
                 .thenReturn(Optional.empty());
 
-        //When
-        Exception exception = Assertions.assertThrows(
+        Exception exception = assertThrows(
                 EntityNotFoundException.class, () -> shoppingCartService.addToCart(null, 100L));
 
-        //Then
-        Assertions.assertEquals("Can't find user by id = 100", exception.getMessage());
-        Mockito.verify(userRepository, Mockito.times(1)).findById(Mockito.any());
-        Mockito.verifyNoMoreInteractions(userRepository);
+        assertEquals("Can't find user by id = 100", exception.getMessage());
+        verify(userRepository, times(1)).findById(any());
+        verifyNoMoreInteractions(userRepository);
     }
 
     @Test
     @DisplayName("Verify the expected getById() exception occurs for ShoppingCartServiceImpl")
     public void addToCart_InvalidBookId_ThrowEntityNotFoundException() {
-        //Given
         Long id = 1L;
-        User user = new User().setId(id);
-        ShoppingCart shoppingCart = new ShoppingCart().setId(id);
+        User user = validUser();
+        ShoppingCart shoppingCart = validShoppingCart();
         AddToCartRequestDto addToCartRequestDto = new AddToCartRequestDto(
                 100L,
                 10
         );
 
-        Mockito.when(userRepository.findById(id))
+        when(userRepository.findById(any()))
                 .thenReturn(Optional.of(user));
-        Mockito.when(shoppingCartRepository.findByUserId(id))
+        when(shoppingCartRepository.findByUserId(any()))
                 .thenReturn(Optional.of(shoppingCart));
-        Mockito.when(bookRepository.findById(Mockito.anyLong()))
+        when(bookRepository.findById(any()))
                 .thenReturn(Optional.empty());
-        //When
 
-        Exception exception = Assertions.assertThrows(
+        Exception exception = assertThrows(
                 EntityNotFoundException.class, () ->
                         shoppingCartService.addToCart(addToCartRequestDto, 1L)
         );
 
-        //Then
-        Assertions.assertEquals("Can't find book by id = 100", exception.getMessage());
-        Mockito.verify(userRepository, Mockito.times(1))
-                .findById(Mockito.any());
-        Mockito.verify(shoppingCartRepository, Mockito.times(1))
-                .findByUserId(Mockito.anyLong());
-        Mockito.verify(bookRepository, Mockito.times(1))
-                .findById(Mockito.anyLong());
-        Mockito.verifyNoMoreInteractions(userRepository);
+        assertEquals("Can't find book by id = 100", exception.getMessage());
+        verify(userRepository, times(1))
+                .findById(any());
+        verify(shoppingCartRepository, times(1))
+                .findByUserId(anyLong());
+        verify(bookRepository, times(1))
+                .findById(anyLong());
+        verifyNoMoreInteractions(userRepository);
     }
 }

@@ -1,14 +1,9 @@
 package mate.academy.bookstore.repository.order;
 
-import java.math.BigDecimal;
-import java.time.LocalDateTime;
-import java.time.Month;
+import static mate.academy.bookstore.util.TestOrderProvider.validOrder;
+
 import java.util.List;
-import java.util.Set;
-import mate.academy.bookstore.model.Book;
 import mate.academy.bookstore.model.Order;
-import mate.academy.bookstore.model.OrderItem;
-import mate.academy.bookstore.model.User;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -32,32 +27,11 @@ class OrderRepositoryTest {
             "classpath:database/order/remove-order.sql"
     }, executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     void findByEmail_ValidUserId_returnListOrder() {
-        Order order = new Order()
-                .setId(1L)
-                .setUser(new User()
-                        .setId(17L)
-                        .setEmail("some_email@exam.com")
-                        .setPassword("Password")
-                        .setFirstName("FirstName")
-                        .setLastName("SecondName"))
-                .setStatus(Order.Status.PENDING)
-                .setTotal(BigDecimal.valueOf(99.99))
-                .setOrderDate(LocalDateTime
-                        .of(2012, Month.SEPTEMBER, 8, 0, 0))
-                .setShippingAddress("some-address")
-                .setOrderItems(Set.of(
-                        new OrderItem()
-                                .setId(1L)
-                                .setBook(new Book()
-                                        .setId(13L)
-                                        .setTitle("some_title")
-                                        .setIsbn("some-isbn")
-                                        .setPrice(BigDecimal.valueOf(99.99)))
-                                .setPrice(BigDecimal.valueOf(99.99))
-                                .setQuantity(1)
-                        ));
+        Order expected = validOrder();
+
         List<Order> actual = orderRepository.findAllByUserId(17L, null);
+
         Assertions.assertEquals(1, actual.size());
-        Assertions.assertEquals(List.of(order), actual);
+        Assertions.assertEquals(List.of(expected), actual);
     }
 }

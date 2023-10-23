@@ -1,5 +1,10 @@
 package mate.academy.bookstore.controller;
 
+import static mate.academy.bookstore.util.TestUserProvider.validRegistrationRequest;
+import static mate.academy.bookstore.util.TestUserProvider.validRegistrationResponse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import mate.academy.bookstore.dto.user.UserLoginRequestDto;
 import mate.academy.bookstore.dto.user.UserLoginResponseDto;
@@ -46,6 +51,7 @@ class AuthenticationControllerTest {
     void login_ValidRequestDto_ReturnUserLoginResponseDto() throws Exception {
         UserLoginRequestDto requestDto = new UserLoginRequestDto("admin@example.com", "admin");
         String jsonRequest = objectMapper.writeValueAsString(requestDto);
+
         MvcResult result = mockMvc.perform(
                         MockMvcRequestBuilders.post("/auth/login")
                                 .contentType(MediaType.APPLICATION_JSON.getMediaType())
@@ -68,23 +74,12 @@ class AuthenticationControllerTest {
             "classpath:database/user/remove-registered-user.sql"
     }, executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     void register_ValidRequestDto_ReturnUserRegistrationResponseDto() throws Exception {
-        UserRegistrationRequestDto requestDto = new UserRegistrationRequestDto(
-                "somenew@example.com",
-                "someNewPassword",
-                "someNewPassword",
-                "someFirstName",
-                "someLastName",
-                "someAddress");
-        UserRegistrationResponseDto expected = new UserRegistrationResponseDto(
-                2L,
-                "somenew@example.com",
-                "someFirstName",
-                "someLastName",
-                "someAddress"
-        );
+        UserRegistrationRequestDto requestDto = validRegistrationRequest();
+        UserRegistrationResponseDto expected = validRegistrationResponse();
         String jsonRequest = objectMapper.writeValueAsString(requestDto);
+
         MvcResult result = mockMvc.perform(
-                        MockMvcRequestBuilders.post("/auth/register")
+                        post("/auth/register")
                                 .contentType(MediaType.APPLICATION_JSON.getMediaType())
                                 .content(jsonRequest)
                 )
@@ -94,7 +89,6 @@ class AuthenticationControllerTest {
         UserRegistrationResponseDto actual = objectMapper.readValue(
                 result.getResponse().getContentAsByteArray(), UserRegistrationResponseDto.class
         );
-        System.out.println(actual);
-        Assertions.assertTrue(EqualsBuilder.reflectionEquals(expected, actual, "id"));
+        assertTrue(EqualsBuilder.reflectionEquals(expected, actual, "id"));
     }
 }

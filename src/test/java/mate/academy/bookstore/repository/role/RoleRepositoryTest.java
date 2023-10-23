@@ -20,7 +20,9 @@ class RoleRepositoryTest {
         Role expected = new Role();
         expected.setId(1L);
         expected.setName(Role.RoleName.ROLE_ADMIN);
+
         Role actual = roleRepository.getByName(Role.RoleName.ROLE_ADMIN);
+
         Assertions.assertEquals(expected, actual);
     }
 }
