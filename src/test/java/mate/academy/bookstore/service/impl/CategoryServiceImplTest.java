@@ -58,7 +58,7 @@ class CategoryServiceImplTest {
         assertEquals(categoriesDto.size(), categories.size());
         assertEquals(categoriesDto.get(0), categoryDto);
         verify(categoryMapper, times(categories.size())).toDto(any());
-        verify(categoryRepository, times(1)).findAll(pageable);
+        verify(categoryRepository).findAll(pageable);
         verifyNoMoreInteractions(categoryMapper, categoryRepository);
 
     }
@@ -76,8 +76,8 @@ class CategoryServiceImplTest {
         CategoryDto actualCategoryDto = categoryService.getById(id);
 
         assertEquals(categoryDto, actualCategoryDto);
-        verify(categoryMapper, times(1)).toDto(any());
-        verify(categoryRepository, times(1)).findById(any());
+        verify(categoryMapper).toDto(any());
+        verify(categoryRepository).findById(any());
         verifyNoMoreInteractions(categoryMapper, categoryRepository);
     }
 
@@ -91,7 +91,7 @@ class CategoryServiceImplTest {
                 EntityNotFoundException.class, () -> categoryService.getById(100L));
 
         assertEquals("Can't find book by id = 100", exception.getMessage());
-        verify(categoryRepository, times(1)).findById(any());
+        verify(categoryRepository).findById(any());
         verifyNoMoreInteractions(categoryRepository);
     }
 
@@ -109,9 +109,9 @@ class CategoryServiceImplTest {
         CategoryDto savedBookDto = categoryService.save(requestDto);
 
         assertEquals(categoryDto, savedBookDto);
-        verify(categoryMapper, times(1)).toModel(any());
-        verify(categoryMapper, times(1)).toDto(any());
-        verify(categoryRepository, times(1)).save(any());
+        verify(categoryMapper).toModel(any());
+        verify(categoryMapper).toDto(any());
+        verify(categoryRepository).save(any());
         verifyNoMoreInteractions(categoryMapper, categoryRepository);
     }
 
@@ -129,9 +129,9 @@ class CategoryServiceImplTest {
         CategoryDto savedBookDto = categoryService.update(anyLong(), requestDto);
 
         assertEquals(categoryDto, savedBookDto);
-        verify(categoryMapper, times(1)).toModel(any());
-        verify(categoryMapper, times(1)).toDto(any());
-        verify(categoryRepository, times(1)).save(any());
+        verify(categoryMapper).toModel(any());
+        verify(categoryMapper).toDto(any());
+        verify(categoryRepository).save(any());
         verifyNoMoreInteractions(categoryMapper, categoryRepository);
     }
 
@@ -140,8 +140,7 @@ class CategoryServiceImplTest {
     public void deleteById_ValidId() {
         Long id = 1L;
         categoryService.deleteById(id);
-        verify(categoryRepository, times(1))
-                .deleteById(anyLong());
+        verify(categoryRepository).deleteById(anyLong());
         verifyNoMoreInteractions(categoryRepository);
     }
 }

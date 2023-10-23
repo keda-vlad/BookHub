@@ -69,10 +69,10 @@ class BookServiceImplTest {
         BookDto savedBookDto = bookService.save(requestDto);
 
         assertEquals(bookDto, savedBookDto);
-        verify(bookMapper, times(1)).toModel(any());
-        verify(bookMapper, times(1)).toDto(any());
-        verify(categoryRepository, times(1)).findAllByIdIn(any());
-        verify(bookRepository, times(1)).save(any());
+        verify(bookMapper).toModel(any());
+        verify(bookMapper).toDto(any());
+        verify(categoryRepository).findAllByIdIn(any());
+        verify(bookRepository).save(any());
         verifyNoMoreInteractions(bookMapper, categoryRepository, bookRepository);
     }
 
@@ -95,7 +95,7 @@ class BookServiceImplTest {
         assertEquals(booksDto.size(), books.size());
         assertEquals(booksDto.get(0), bookDto);
         verify(bookMapper, times(books.size())).toDto(any());
-        verify(bookRepository, times(1)).findAllWithCategories(any());
+        verify(bookRepository).findAllWithCategories(any());
         verifyNoMoreInteractions(bookMapper, bookRepository);
     }
 
@@ -112,8 +112,8 @@ class BookServiceImplTest {
         BookDto actualBookDto = bookService.getById(id);
 
         assertEquals(bookDto, actualBookDto);
-        verify(bookMapper, times(1)).toDto(any());
-        verify(bookRepository, times(1)).findByIdWithCategories(any());
+        verify(bookMapper).toDto(any());
+        verify(bookRepository).findByIdWithCategories(any());
         verifyNoMoreInteractions(bookMapper, bookRepository);
     }
 
@@ -127,7 +127,7 @@ class BookServiceImplTest {
                 EntityNotFoundException.class, () -> bookService.getById(100L));
 
         assertEquals("Can't find book by id = 100", exception.getMessage());
-        verify(bookRepository, times(1)).findByIdWithCategories(any());
+        verify(bookRepository).findByIdWithCategories(any());
         verifyNoMoreInteractions(bookMapper, bookRepository);
     }
 
@@ -153,8 +153,8 @@ class BookServiceImplTest {
         assertEquals(searchedBooks.size(), books.size());
         assertEquals(searchedBooks.get(0), bookDto);
         verify(bookMapper, times(books.size())).toDto(any());
-        verify(bookSpecificationBuilder, times(1)).build(any());
-        verify(bookRepository, times(1))
+        verify(bookSpecificationBuilder).build(any());
+        verify(bookRepository)
                 .findAll(specification, pageable);
         verifyNoMoreInteractions(bookMapper, bookRepository, bookSpecificationBuilder);
     }
@@ -181,8 +181,7 @@ class BookServiceImplTest {
         assertEquals(searchedBooks.get(0), bookDtoWithoutCategoryIds);
         verify(bookMapper, times(books.size()))
                 .toDtoWithoutCategories(any());
-        verify(bookRepository, times(1))
-                .findAllByCategoryId(any(), any());
+        verify(bookRepository).findAllByCategoryId(any(), any());
         verifyNoMoreInteractions(bookMapper, bookRepository);
     }
 
@@ -202,10 +201,10 @@ class BookServiceImplTest {
         BookDto updatedBookDto = bookService.update(anyLong(), requestDto);
 
         assertEquals(bookDto, updatedBookDto);
-        verify(bookMapper, times(1)).toModel(any());
-        verify(bookMapper, times(1)).toDto(any());
-        verify(categoryRepository, times(1)).findAllByIdIn(any());
-        verify(bookRepository, times(1)).save(any());
+        verify(bookMapper).toModel(any());
+        verify(bookMapper).toDto(any());
+        verify(categoryRepository).findAllByIdIn(any());
+        verify(bookRepository).save(any());
         verifyNoMoreInteractions(bookMapper, categoryRepository, bookRepository);
     }
 

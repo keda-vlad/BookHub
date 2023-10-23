@@ -114,7 +114,6 @@ class CategoryControllerTest {
         CategoryDto[] actual = objectMapper.readValue(
                 result.getResponse().getContentAsByteArray(), CategoryDto[].class
         );
-        System.out.println(actual);
         assertEquals(expected.size(), actual.length);
         assertEquals(expected, Arrays.stream(actual).toList());
     }
