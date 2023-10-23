@@ -35,13 +35,13 @@ Administrators can manage order statuses, and users can create orders, view thei
 
 In our API, functionality is divided for Users and Admin:
 
-| Controller           | User                                                     | Admin                      |
-|-----------------------|----------------------------------------------------------|------------------------------------|
-| BookController        | Book search with filtering, pagination and specification | Read, update, delete functionality |
-| CategoryController    | Category and books by categories search                  | Read, update, delete functionality |
-| AuthenticationController | Registration, authentication                             | Ability to change user roles |
-| ShoppingCartController| CRUD operations on the shopping cart                     | -                                    |
-| OrderController       | Order creation, orders viewing                           | Order status management        |
+| Controller               | User                                                     | Admin                              |
+|--------------------------|----------------------------------------------------------|------------------------------------|
+| BookController           | Book search with filtering, pagination and specification | Read, update, delete functionality |
+| CategoryController       | Category and books by categories search                  | Read, update, delete functionality |
+| AuthenticationController | Registration, authentication                             | Ability to change user roles       |
+| ShoppingCartController   | CRUD operations on the shopping cart                     | -                                  |
+| OrderController          | Order creation, orders viewing                           | Order status management            |
 
 
 ## Installation
