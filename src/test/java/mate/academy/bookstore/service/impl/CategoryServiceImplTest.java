@@ -1,5 +1,17 @@
 package mate.academy.bookstore.service.impl;
 
+import static mate.academy.bookstore.util.TestCategoryProvider.toCategoryDto;
+import static mate.academy.bookstore.util.TestCategoryProvider.toRequestDto;
+import static mate.academy.bookstore.util.TestCategoryProvider.validCategory;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.any;
+import static org.mockito.Mockito.anyLong;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
+import static org.mockito.Mockito.when;
+
 import java.util.List;
 import java.util.Optional;
 import mate.academy.bookstore.dto.category.CategoryDto;
@@ -8,13 +20,11 @@ import mate.academy.bookstore.exception.EntityNotFoundException;
 import mate.academy.bookstore.mapper.CategoryMapper;
 import mate.academy.bookstore.model.Category;
 import mate.academy.bookstore.repository.category.CategoryRepository;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -33,147 +43,104 @@ class CategoryServiceImplTest {
     @Test
     @DisplayName("Verify findAll() method works for CategoryServiceImpl")
     public void findAllCategories_ValidPageable_ReturnListCategoryDto() {
-        //Given
         Category category = validCategory();
-        CategoryDto categoryDto = validCategoryDto(category);
+        CategoryDto categoryDto = toCategoryDto(category);
 
         Pageable pageable = PageRequest.of(0, 10);
         List<Category> categories = List.of(category);
         Page<Category> productPage = new PageImpl<>(categories, pageable, categories.size());
 
-        Mockito.when(categoryRepository.findAll(pageable)).thenReturn(productPage);
-        Mockito.when(categoryMapper.toDto(category)).thenReturn(categoryDto);
+        when(categoryRepository.findAll(pageable)).thenReturn(productPage);
+        when(categoryMapper.toDto(category)).thenReturn(categoryDto);
 
-        //When
         List<CategoryDto> categoriesDto = categoryService.findAll(pageable);
 
-        //Then
-        Assertions.assertEquals(categoriesDto.size(), categories.size());
-        Assertions.assertEquals(categoriesDto.get(0), categoryDto);
-        Mockito.verify(categoryMapper, Mockito.times(categories.size())).toDto(Mockito.any());
-        Mockito.verify(categoryRepository, Mockito.times(1)).findAll(pageable);
-        Mockito.verifyNoMoreInteractions(categoryMapper, categoryRepository);
+        assertEquals(categoriesDto.size(), categories.size());
+        assertEquals(categoriesDto.get(0), categoryDto);
+        verify(categoryMapper, times(categories.size())).toDto(any());
+        verify(categoryRepository).findAll(pageable);
+        verifyNoMoreInteractions(categoryMapper, categoryRepository);
 
     }
 
     @Test
     @DisplayName("Verify getById() method works for CategoryServiceImpl")
     public void getCategoryById_ValidId_ReturnCategoryDto() {
-        //Given
         Long id = 1L;
         Category category = validCategory();
-        CategoryDto categoryDto = validCategoryDto(category);
+        CategoryDto categoryDto = toCategoryDto(category);
 
-        Mockito.when(categoryRepository.findById(id)).thenReturn(Optional.of(category));
-        Mockito.when(categoryMapper.toDto(category)).thenReturn(categoryDto);
+        when(categoryRepository.findById(id)).thenReturn(Optional.of(category));
+        when(categoryMapper.toDto(category)).thenReturn(categoryDto);
 
-        //When
         CategoryDto actualCategoryDto = categoryService.getById(id);
 
-        //Then
-        Assertions.assertEquals(categoryDto, actualCategoryDto);
-        Mockito.verify(categoryMapper, Mockito.times(1)).toDto(Mockito.any());
-        Mockito.verify(categoryRepository, Mockito.times(1)).findById(Mockito.any());
-        Mockito.verifyNoMoreInteractions(categoryMapper, categoryRepository);
+        assertEquals(categoryDto, actualCategoryDto);
+        verify(categoryMapper).toDto(any());
+        verify(categoryRepository).findById(any());
+        verifyNoMoreInteractions(categoryMapper, categoryRepository);
     }
 
     @Test
     @DisplayName("Verify the expected getById() exception occurs for CategoryServiceImpl")
     public void getBookById_InvalidId_ThrowEntityNotFoundException() {
-        //Given
-        Mockito.when(categoryRepository.findById(Mockito.anyLong()))
+        when(categoryRepository.findById(anyLong()))
                 .thenReturn(Optional.empty());
 
-        //When
-        Exception exception = Assertions.assertThrows(
+        Exception exception = assertThrows(
                 EntityNotFoundException.class, () -> categoryService.getById(100L));
 
-        //Then
-        Assertions.assertEquals("Can't find book by id = 100", exception.getMessage());
-        Mockito.verify(categoryRepository, Mockito.times(1)).findById(Mockito.any());
-        Mockito.verifyNoMoreInteractions(categoryRepository);
+        assertEquals("Can't find book by id = 100", exception.getMessage());
+        verify(categoryRepository).findById(any());
+        verifyNoMoreInteractions(categoryRepository);
     }
 
     @Test
     @DisplayName("Verify save() method works for CategoryServiceImpl")
     public void saveCategory_ValidRequestDto_ReturnCategoryDto() {
-        //Given
         Category category = validCategory();
-        RequestCategoryDto requestDto = validRequestDto(category);
-        CategoryDto categoryDto = validCategoryDto(category);
+        RequestCategoryDto requestDto = toRequestDto(category);
+        CategoryDto categoryDto = toCategoryDto(category);
 
-        Mockito.when(categoryMapper.toModel(requestDto)).thenReturn(category);
-        Mockito.when(categoryRepository.save(category)).thenReturn(category);
-        Mockito.when(categoryMapper.toDto(category)).thenReturn(categoryDto);
+        when(categoryMapper.toModel(requestDto)).thenReturn(category);
+        when(categoryRepository.save(category)).thenReturn(category);
+        when(categoryMapper.toDto(category)).thenReturn(categoryDto);
 
-        //When
         CategoryDto savedBookDto = categoryService.save(requestDto);
 
-        //Then
-        Assertions.assertEquals(categoryDto, savedBookDto);
-        Mockito.verify(categoryMapper, Mockito.times(1)).toModel(Mockito.any());
-        Mockito.verify(categoryMapper, Mockito.times(1)).toDto(Mockito.any());
-        Mockito.verify(categoryRepository, Mockito.times(1)).save(Mockito.any());
-        Mockito.verifyNoMoreInteractions(categoryMapper, categoryRepository);
+        assertEquals(categoryDto, savedBookDto);
+        verify(categoryMapper).toModel(any());
+        verify(categoryMapper).toDto(any());
+        verify(categoryRepository).save(any());
+        verifyNoMoreInteractions(categoryMapper, categoryRepository);
     }
 
     @Test
     @DisplayName("Verify update() method works for CategoryServiceImpl")
     public void updateCategory_ValidRequestDto_ReturnCategoryDto() {
-        //Given
         Category category = validCategory();
-        RequestCategoryDto requestDto = validRequestDto(category);
-        CategoryDto categoryDto = validCategoryDto(category);
+        RequestCategoryDto requestDto = toRequestDto(category);
+        CategoryDto categoryDto = toCategoryDto(category);
 
-        Mockito.when(categoryMapper.toModel(requestDto)).thenReturn(category);
-        Mockito.when(categoryRepository.save(category)).thenReturn(category);
-        Mockito.when(categoryMapper.toDto(category)).thenReturn(categoryDto);
+        when(categoryMapper.toModel(requestDto)).thenReturn(category);
+        when(categoryRepository.save(category)).thenReturn(category);
+        when(categoryMapper.toDto(category)).thenReturn(categoryDto);
 
-        //When
-        CategoryDto savedBookDto = categoryService.update(Mockito.anyLong(), requestDto);
+        CategoryDto savedBookDto = categoryService.update(anyLong(), requestDto);
 
-        //Then
-        Assertions.assertEquals(categoryDto, savedBookDto);
-        Mockito.verify(categoryMapper, Mockito.times(1)).toModel(Mockito.any());
-        Mockito.verify(categoryMapper, Mockito.times(1)).toDto(Mockito.any());
-        Mockito.verify(categoryRepository, Mockito.times(1)).save(Mockito.any());
-        Mockito.verifyNoMoreInteractions(categoryMapper, categoryRepository);
+        assertEquals(categoryDto, savedBookDto);
+        verify(categoryMapper).toModel(any());
+        verify(categoryMapper).toDto(any());
+        verify(categoryRepository).save(any());
+        verifyNoMoreInteractions(categoryMapper, categoryRepository);
     }
 
     @Test
     @DisplayName("Verify deleteById() method works for CategoryServiceImpl")
     public void deleteById_ValidId() {
-        //Given
         Long id = 1L;
-
-        //When
         categoryService.deleteById(id);
-
-        //Then
-        Mockito.verify(categoryRepository, Mockito.times(1))
-                .deleteById(Mockito.anyLong());
-        Mockito.verifyNoMoreInteractions(categoryRepository);
-    }
-
-    private RequestCategoryDto validRequestDto(Category category) {
-        return new RequestCategoryDto(
-                category.getName(),
-                category.getDescription()
-        );
-    }
-
-    private Category validCategory() {
-        return new Category()
-                .setId(1L)
-                .setName("test_category_name")
-                .setDescription("test_description");
-    }
-
-    private CategoryDto validCategoryDto(Category category) {
-        return new CategoryDto(
-                category.getId(),
-                category.getName(),
-                category.getDescription()
-        );
+        verify(categoryRepository).deleteById(anyLong());
+        verifyNoMoreInteractions(categoryRepository);
     }
 }
