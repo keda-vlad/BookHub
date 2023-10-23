@@ -10,5 +10,5 @@ import org.mapstruct.Mapper;
 public interface CategoryMapper {
     CategoryDto toDto(Category category);
 
-    Category toEntity(RequestCategoryDto categoryDto);
+    Category toModel(RequestCategoryDto categoryDto);
 }

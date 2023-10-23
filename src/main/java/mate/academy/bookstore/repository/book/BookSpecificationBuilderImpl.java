@@ -29,10 +29,10 @@ public class BookSpecificationBuilderImpl implements BookSpecificationBuilder {
                     .getSpecification(bookSearchParametersDto.authors()));
 
         }
-        if (bookSearchParametersDto.authors() != null
-                && bookSearchParametersDto.authors().length > 0) {
+        if (bookSearchParametersDto.prices() != null
+                && bookSearchParametersDto.prices().length > 0) {
             spec = spec.and(specificationProviderManager.getSpecificationProvider(PRICE_KEY)
-                    .getSpecification(bookSearchParametersDto.authors()));
+                    .getSpecification(bookSearchParametersDto.prices()));
 
         }
         return spec;
