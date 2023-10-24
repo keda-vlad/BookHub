@@ -84,7 +84,7 @@ Follow these steps to set up and run the Book Store API on your local machine:
    - Open Postman.
    - Import the [file](book-store.postman_collection.json) with requests.
 ## Video Presentation
-In this [video](https://www.loom.com/share/19bad7530e49408dbd6e78cc9c209a67?sid=d4630fee-e404-45b8-a501-a45911e13071), you'll get a comprehensive demonstration of how the application functions. We'll explore the intricacies of searching for books and categories, the admin's capacity to modify them, the features available to users, and the mechanics behind the shopping cart and order processes.
+In this [video](https://www.loom.com/share/ac332337b27346a8812336daa807c97a), you'll get a comprehensive demonstration of how the application functions. We'll explore the intricacies of searching for books and categories, the admin's capacity to modify them, the features available to users, and the mechanics behind the shopping cart and order processes.
 ## Contribution
 
    ### Issues and Solutions
