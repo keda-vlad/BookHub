@@ -1,6 +1,6 @@
-# Bookstore API: Enhancing Your Bookstore Experience
+# BookHub API: Enhancing Your Bookstore Experience
 
-Welcome to the Bookstore API project! Our powerful and secure application, developed using Java Spring Boot, aims to enrich online book purchases for all book enthusiasts. We have combined various features and advanced technologies to provide users with a secure, comprehensive and convenient e-commerce platform. Below, we will introduce you to the key aspects and functional capabilities of our application.
+Welcome to the BookHub API project! Our powerful and secure application, developed using Java Spring Boot, aims to enrich online book purchases for all book enthusiasts. We have combined various features and advanced technologies to provide users with a secure, comprehensive and convenient e-commerce platform. Below, we will introduce you to the key aspects and functional capabilities of our application.
 
 ## Features:
 
